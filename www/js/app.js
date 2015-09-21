@@ -4,23 +4,23 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 //angular.module('starter', ['ionic'])
-var app = angular.module('myApp', ['ionic']);
+var app = angular.module('instagram', ['ionic', 'instagram.controller']);
 
 app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         if(window.cordova && window.cordova.plugins.Keyboard) {
-          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         }
         if(window.StatusBar) {
-          StatusBar.styleDefault();
+            StatusBar.styleDefault();
         }
     });
 });
 
 
-app.config(function($stateProvider) {
+app.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
 
         .state('app', {
@@ -32,40 +32,50 @@ app.config(function($stateProvider) {
         .state('app.home', {
             url: '/home',
             views: {
-              'app-home': {
+                'app-home': {
                 templateUrl: 'templates/home.html',
                 controller: 'HomeCtrl'
-              }
+                }
             }
         })
 
         .state('app.search', {
-          url: '/search',
-          views: {
-            'app-search': {
-              templateUrl: 'templates/search.html',
-              controller: 'SearchCtrl'
+            url: '/search',
+            views: {
+                'app-search': {
+                templateUrl: 'templates/search.html',
+                controller: 'SearchCtrl'
+                }
             }
-          }
         })
 
         .state('app.camera', {
-          url: '/camera',
-          views: {
-            'app-camera': {
-              templateUrl: 'templates/camera.html',
-              controller: 'CameraCtrl'
+            url: '/camera',
+            views: {
+                'app-camera': {
+                templateUrl: 'templates/camera.html',
+                controller: 'CameraCtrl'
+                }
             }
-          }
+        })
+
+        .state('app.activity', {
+            url: '/activity',
+            views: {
+                'app-activity': {
+                templateUrl: 'templates/activity.html',
+                controller: 'ActivityCtrl'
+                }
+            }
         })
 
         .state('app.account', {
-        url: '/account',
-        views: {
-          'app-account': {
-            templateUrl: 'templates/profile.html',
-            controller: 'AccountCtrl'
-          }
+            url: '/account',
+            views: {
+                'app-account': {
+                templateUrl: 'templates/profile.html',
+                controller: 'AccountCtrl'
+            }
         }
     });
 
