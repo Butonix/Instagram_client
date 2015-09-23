@@ -69,6 +69,26 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         })
 
+        .state('app.activity.following', {
+            url: '/following',
+            views: {
+                'app-activity-following': {
+                templateUrl: 'templates/activity-following.html',
+                controller: 'ActivityCtrl'
+                }
+            }
+        })
+
+        .state('app.activity.you', {
+            url: '/you',
+            views: {
+                'app-activity-you': {
+                templateUrl: 'templates/activity-you.html',
+                controller: 'ActivityCtrl'
+                }
+            }
+        })
+
         .state('app.account', {
             url: '/account',
             views: {

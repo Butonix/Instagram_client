@@ -1,1 +1,13 @@
 /* Empty. Add your own CSS if you like */
+.activity > .tab-nav.tabs > .tabs-bottom.tabs-standard > .tab-nav.tabs {
+	display: none;
+}
+
+.item-avatar .action-img {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	max-height: 56px;
+	max-width: 56px;
+	border-radius: 1px;
+}
