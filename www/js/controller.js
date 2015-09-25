@@ -16,8 +16,6 @@ angular.module('instagram.controller', [])
 
 })
 
-.controller('AccountCtrl', function($scope) {
-  // $scope.settings = {
-  //   enableFriends: true
-  // };
+.controller('AccountCtrl', function($scope, $ionicNavBarDelegate) {
+
 });

@@ -53,7 +53,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             url: '/camera',
             views: {
                 'app-camera': {
-                templateUrl: 'templates/camera.html',
+                templateUrl: 'templates/activity.html',
                 controller: 'CameraCtrl'
                 }
             }
@@ -72,7 +72,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
         .state('app.activity.following', {
             url: '/following',
             views: {
-                'app-activity-following': {
+                'activity-following': {
                 templateUrl: 'templates/activity-following.html',
                 controller: 'ActivityCtrl'
                 }
@@ -82,7 +82,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
         .state('app.activity.you', {
             url: '/you',
             views: {
-                'app-activity-you': {
+                'activity-you': {
                 templateUrl: 'templates/activity-you.html',
                 controller: 'ActivityCtrl'
                 }
@@ -93,11 +93,41 @@ app.config(function($stateProvider, $urlRouterProvider) {
             url: '/account',
             views: {
                 'app-account': {
-                templateUrl: 'templates/profile.html',
+                templateUrl: 'templates/account.html',
                 controller: 'AccountCtrl'
+                }
             }
-        }
-    });
+        })
+
+        .state('app.account.profile', {
+            url: '/profile',
+            views: {
+                'account-profile': {
+                templateUrl: 'templates/account-profile.html',
+                controller: 'AccountCtrl'
+                }
+            }
+        })
+
+        .state('app.account.edit', {
+            url: '/edit',
+            views: {
+                'account-edit': {
+                templateUrl: 'templates/account-edit.html',
+                controller: 'AccountCtrl'
+                }
+            }
+        })
+
+        .state('app.account.option', {
+            url: '/option',
+            views: {
+                'account-option': {
+                templateUrl: 'templates/account-option.html',
+                controller: 'AccountCtrl'
+                }
+            }
+        });
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');
