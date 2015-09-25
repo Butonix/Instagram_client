@@ -99,35 +99,32 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         })
 
-        .state('app.account.profile', {
-            url: '/profile',
-            views: {
-                'account-profile': {
-                templateUrl: 'templates/account-profile.html',
-                controller: 'AccountCtrl'
-                }
-            }
-        })
-
-        .state('app.account.edit', {
+        .state('app.edit', {
             url: '/edit',
             views: {
-                'account-edit': {
+                'app-account': {
                 templateUrl: 'templates/account-edit.html',
                 controller: 'AccountCtrl'
                 }
             }
         })
 
-        .state('app.account.option', {
+        .state('app.option', {
             url: '/option',
             views: {
-                'account-option': {
+                'app-account': {
                 templateUrl: 'templates/account-option.html',
                 controller: 'AccountCtrl'
                 }
             }
-        });
+        })
+
+        .state('camera', {
+            url: '/camera',
+            absract: true,
+            templateUrl: 'templates/camera.html',
+        })
+        ;
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');
