@@ -99,6 +99,26 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         })
 
+        .state('app.account.grid', {
+            url: '/grid',
+            views: {
+                'grid-img': {
+                templateUrl: 'templates/account-grid.html',
+                controller: 'AccountCtrl'
+                }
+            }
+        })
+
+        .state('app.account.post', {
+            url: '/post',
+            views: {
+                'post-img': {
+                templateUrl: 'templates/account-post.html',
+                controller: 'AccountCtrl'
+                }
+            }
+        })
+
         .state('app.edit', {
             url: '/edit',
             views: {
