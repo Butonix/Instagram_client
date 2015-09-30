@@ -1,6 +1,13 @@
-angular.module('instagram.controller', [])
+angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
-.controller('HomeCtrl', function($scope) {})
+.controller('HomeCtrl', function($scope, Posts) {
+	$scope.posts = Posts.all();
+	$scope.remove = function(post) {
+		Posts.remove(post);
+	}
+
+
+})
 
 .controller('SearchCtrl', function($scope) {
 
@@ -8,7 +15,7 @@ angular.module('instagram.controller', [])
 })
 
 .controller('CameraCtrl', function($scope) {
-    // $scope.chat = Chats.get($stateParams.chatId);
+
 })
 
 .controller('ActivityCtrl', function($scope) {

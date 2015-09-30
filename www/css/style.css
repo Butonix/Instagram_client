@@ -26,11 +26,12 @@ a:hover, a:focus {
 
 .search .button.button-positive.button-outline {
     position: absolute;
-    top: 20px;
+    top: 22px;
     right: 8px;
     font-size: 20px;
     min-height: 32px;
     line-height: 30px;
+    padding-top: 4px;
 }
 
 .search .button.button-positive.button-outline .ion-plus {
