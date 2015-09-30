@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 //angular.module('starter', ['ionic'])
-var app = angular.module('instagram', ['ionic', 'instagram.controller']);
+var app = angular.module('instagram', ['ionic', 'instagram.controller', 'instagram.services']);
 
 app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -12,6 +12,7 @@ app.run(function($ionicPlatform) {
         // for form inputs)
         if(window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            cordova.plugins.Keyboard.disableScroll(true);
         }
         if(window.StatusBar) {
             StatusBar.styleDefault();
@@ -64,6 +65,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
             views: {
                 'search-tags': {
                 templateUrl: 'templates/search-tags.html',
+                controller: 'SearchCtrl'
+                }
+            }
+        })
+
+        .state('app.search.places', {
+            url: '/places',
+            views: {
+                'search-places': {
+                templateUrl: 'templates/search-places.html',
                 controller: 'SearchCtrl'
                 }
             }

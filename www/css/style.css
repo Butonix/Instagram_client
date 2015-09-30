@@ -24,6 +24,30 @@ a:hover, a:focus {
     border-radius: 1px;
 }
 
+.search .button.button-positive.button-outline {
+    position: absolute;
+    top: 20px;
+    right: 8px;
+    font-size: 20px;
+    min-height: 32px;
+    line-height: 30px;
+}
+
+.search .button.button-positive.button-outline .ion-plus {
+    font-size: 14px;
+    margin-right: 4px;
+}
+
+.search .button.button-positive.button-outline.activated {
+    background-color: #33cd5f;
+    border: none;
+    color: #ffffff;
+}
+
+.search .button.button-positive.button-outline.activated .ion-plus:before {
+    content: "\f122";
+}
+
 .padding {
     /*margin-top: 40px;*/
 }
