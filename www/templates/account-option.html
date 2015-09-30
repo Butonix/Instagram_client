@@ -1,14 +1,70 @@
 <ion-view>
 
     <div class="bar bar-header bar-positive">
-        <button class="button button-clear button-white" ng-click="$ionicGoBack()">
-            <i class="icon ion-arrow-left-c"></i>
-        </button>
+        <div class="buttons">
+            <a href="#/app/account" class="button icon ion-arrow-left-c button-clear button-white"></a>
+        </div>
         <h1 class="title">Option</h1>
     </div>
 
-    <ion-content has-header="true" class="padding">
-        <h1>Option page<a href="#/app/edit" class="button button-dark">go Edit</a></h1>
+    <ion-content has-header="true" class="main-content">
+
+        <div class="list">
+        	<div class="item item-divider">Follow People</div>
+        	<a class="item" href="#">Facebook Friends</a>
+        	<a class="item" href="#">Find Contacts</a>
+        	<a class="item" href="#">Invite Friends</a>
+        </div>
+        <div class="list">
+        	<div class="item item-divider">Account</div>
+        	<a class="item" href="#">Edit Profile</a>
+        	<a class="item" href="#">Change Password</a>
+        	<a class="item" href="#">Post you've liked</a>
+        	<div class="item item-toggle">Private Account
+        		<label class="toggle toggle-positive">
+        			<input type="checkbox">
+        			<div class="track"><div class="handle"></div></div>
+        		</label>
+        	</div>
+        </div>
+        <div class="list">
+        	<div class="item item-divider">Setting</div>
+        	<a class="item" href="#">Linked Accounts</a>
+        	<a class="item" href="#">Cellular Dara Use</a>
+        	<a class="item" href="#">Upload Quality</a>
+        	<div class="item item-toggle">Save Original Photos
+        		<label class="toggle toggle-positive">
+        			<input type="checkbox">
+        			<div class="track"><div class="handle"></div></div>
+        		</label>
+        	</div>
+        	<div class="item item-toggle">Save videos After Posting
+        		<label class="toggle toggle-positive">
+        			<input type="checkbox">
+        			<div class="track"><div class="handle"></div></div>
+        		</label>
+        	</div>
+        </div>
+        <div class="list">
+        	<div class="item item-divider">Support</div>
+        	<a class="item" href="#">Instagram Help Center</a>
+        	<a class="item" href="#">Report a Problem</a>
+        </div>
+        <div class="list">
+        	<div class="item item-divider">About</div>
+        	<a class="item" href="#">Ads</a>
+        	<a class="item" href="#">Blog</a>
+        	<a class="item" href="#">Privacy Policy</a>
+        	<a class="item" href="#">Terms of Service</a>
+        	<a class="item" href="#">Ads</a>
+        	<a class="item" href="#">Open Source Libraries</a>
+        </div>
+        <div class="list">
+        	<div class="item item-divider"></div>
+        	<a class="item" href="#">Clear Search History</a>
+        	<a class="item" href="#">Log Out</a>
+        </div>
+
     </ion-content>
 
 </ion-view>

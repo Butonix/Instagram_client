@@ -1,14 +1,59 @@
 <ion-view>
+    <form name="eidt-form">
 
-    <div class="bar bar-header bar-positive">
-        <button class="button button-clear button-white" ng-click="$ionicGoBack()">
-            <i class="icon ion-arrow-left-c"></i>
-        </button>
-        <h1 class="title">Edit</h1>
-    </div>
+        <div class="bar bar-header bar-positive">
 
-    <ion-content has-header="true" class="padding">
-        <h1>Edit page<a href="#/app/edit" class="button button-dark">go Edit</a></h1>
-    </ion-content>
+            <div class="buttons">
+                <a href="#/app/account" class="button icon ion-arrow-left-c button-clear button-white"></a>
+            </div>
 
+            <h1 class="title">Edit</h1>
+
+            <button type="submit" class="button button-clear button-white">Save</button>
+
+        </div>
+
+        <ion-content has-header="true" class="main-content">
+
+            <div class="list">
+                <label class="item item-input">
+                    <i class="icon ion-card placeholder-icon"></i>
+                    <input type="text" value="true name">
+                </label>
+                <label class="item item-input">
+                    <i class="icon ion-person placeholder-icon"></i>
+                    <input type="text" value="user name">
+                </label>
+                <label class="item item-input">
+                    <i class="icon ion-compass placeholder-icon"></i>
+                    <input type="text" placeholder="Website">
+                </label>
+                <label class="item item-input">
+                    <i class="icon ion-quote placeholder-icon"></i>
+                    <input type="text" placeholder="Bio">
+                </label>
+            </div>
+            
+            <div class="list">
+                <div class="item item-divider">Private Information</div>
+                <label class="item item-input">
+                    <i class="icon ion-ios-email placeholder-icon"></i>
+                    <input type="text" value="email@domain.com">
+                </label>
+                <label class="item item-input">
+                    <i class="icon ion-android-phone-portrait placeholder-icon"></i>
+                    <input type="text" value="phone number">
+                </label>
+                <label class="item item-input">
+                    <i class="icon ion-transgender placeholder-icon"></i>
+                    <select>
+                        <option value="0" selected>Not Specified</option>
+                        <option value="1">Male</option>
+                        <option value="2">Female</option>
+                    </select>
+                </label>
+            </div>
+        <ion-content>
+
+    </form>
 </ion-view>

@@ -49,6 +49,26 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         })
 
+        .state('app.search.people', {
+            url: '/people',
+            views: {
+                'search-people': {
+                templateUrl: 'templates/search-people.html',
+                controller: 'SearchCtrl'
+                }
+            }
+        })
+
+        .state('app.search.tags', {
+            url: '/tags',
+            views: {
+                'search-tags': {
+                templateUrl: 'templates/search-tags.html',
+                controller: 'SearchCtrl'
+                }
+            }
+        })
+
         .state('app.camera', {
             url: '/camera',
             views: {
