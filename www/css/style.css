@@ -31,7 +31,7 @@ a:hover, a:focus {
     font-size: 20px;
     min-height: 32px;
     line-height: 30px;
-    padding-top: 4px;
+    padding-top: 5px;
 }
 
 .search .button.button-positive.button-outline .ion-plus {

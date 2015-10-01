@@ -26,37 +26,16 @@
 
             <div class="item item-body">
                 <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"> {{ like }} </b></p>
+
                 <p class="img-caption"><b>{{ post.user.username }}</b> {{ post.caption }}</p>
-                <p class="img-comments" ng-repeat="comment in post.comments"><b>{{ comment.user.username }}</b> {{ comment.content }}</p>
+                <p class="img-comments" ng-repeat="comment in post.comments">
+                    <b>{{ comment.user.username }}</b> {{ comment.content }}
+                </p>
+
                 <input type="text" placeholder="Add a comment">
             </div>
 
         </div>
-
-<!--         <div class="list card">
-            <a class="item item-avatar" href="#">
-                <img src="img/ionic.png">
-                <h2>User name</h2>
-                <p>4h</p>
-            </a>
-
-            <div class="item item-image">
-                <img src="img/img.jpg">
-            </div>
-
-            <div class="item tabs tabs-secondary tabs-icon-left">
-                <a href="" class="tab-item"><i class="icon ion-ios-heart-outline"></i></a>
-                <a href="" class="tab-item"><i class="icon ion-ios-chatbubble-outline"></i></a>
-                <a href="" class="tab-item"><i class="icon ion-share"></i></a>
-                <a href="" class="tab-item"><i class="icon ion-android-more-vertical"></i></a>
-            </div>
-
-            <div class="item item-body">
-                <p><b><a href=""><i class="icon ion-ios-heart"></i></a> Mary, Rose, Jack</b></p>
-                <p><span class="user"><b>Mary</b></span><span class="comment"> This is a "Facebook" styled Card. The header is created from a Thumbnail List item.</span></p>
-                <input type="text" placeholder="Add a comment">
-            </div>
-        </div> -->
-
+        
     </ion-content>
 </ion-view>
