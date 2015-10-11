@@ -1,6 +1,6 @@
 angular.module('instagram.services', ['ionic', 'instagram.constant'])
 
-.factory('UserService', function($q, $http, URL) {
+.factory('AuthService', function($q, $http, URL) {
     var LOCAL_TOKEN_KEY = 'localToken';
     var LOCAL_USER_KEY  = 'Instagram User';
     var isAuthenticated = false;
@@ -44,8 +44,8 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
                 .success(function (res) {
                     isAuthenticated = true;
                     storeUserCredentials(res.token, res.user);
-                    console.log(res.message);
-                    resolve('Login success');
+                    resolve(res.user.username);
+                    console.log('currentUser2: ' + res.user.username);
                 })
                 .error(function (err) {
                     reject(err);
@@ -57,12 +57,84 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         destroyUserCredentials();
     };
 
+    var register = function(data) {
+        return $q(function (resolve, reject) {
+
+            $http.post(URL.base + URL.register, data)
+                .success(function (res) {
+                    console.log(res.message);
+                    resolve('Register success');
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });
+    }
+
     loadUserCredentials();
 
     return {
         login: login,
         logout: logout,
+        register: register,
         isAuthenticated: isAuthenticated,
         user: this.user
     };
+})
+
+.factory('UserService', function($q, $http, URL, AuthService) {
+    var loadUser = function(user_id) {
+        return $q(function (resolve, reject) {
+
+            if (!user_id) reqURL = URL.base + URL.getProfile;
+            else reqURL = URL.base + URL.getProfile + '/' + user_id;
+
+            $http.get(reqURL)
+                .success(function (res) {
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        }); 
+    }
+
+    return {
+        loadUser: loadUser
+    };
+})
+
+.factory('PostService', function($q, $http, URL, AuthService) {
+    var loadNewfeeds = function() {
+        return $q(function (resolve, reject) {
+
+            $http.get(URL.base + URL.postNewfeeds)
+                .success(function (res) {
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        }); 
+    }
+
+    return {
+        newFeeds: loadNewfeeds
+    };
+})
+
+.factory('CommentService', function($q, $http, URL, AuthService) {
+    var loadComments = function(getPost) {
+        return $q(function (resolve, reject) {
+
+            $http.get(URL.base + URL.postComment + '/' + getPost)
+                .success(function (res) {
+                    console.log(res);
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });
+    }
 })

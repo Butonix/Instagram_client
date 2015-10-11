@@ -5,7 +5,9 @@ angular.module('instagram.constant', [])
     authenticate: '/api/user/auth',
     register: '/api/user',
 
-    postFeeds: '/api/post/feeds',
+    getProfile: '/api/user',
+
+    postNewfeeds: '/api/post/newfeeds',
     postRead: '/api/post',
     postLike: '/api/like/post',
     postComment: '/api/comment/post',

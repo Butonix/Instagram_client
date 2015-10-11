@@ -8,9 +8,9 @@
         <div class="list card" ng-repeat="post in posts">
 
             <a class="item item-avatar" href="#/app/account">
-                <img ng-src="{{ post.user.profile_img }}">
-                <h2>{{ post.user.username }}</h2>
-                <p><span am-time-ago="post.created_time"></span></p>
+                <img ng-src="{{ post.user_avatar }}">
+                <h2>{{ post.user_username }}</h2>
+                <p><span am-time-ago="post.createdTime"></span></p>
             </a>
 
             <div class="item item-image">
@@ -25,11 +25,11 @@
             </div>
 
             <div class="item item-body">
-                <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"> {{ like }} </b></p>
+                <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"><a href="#/app/user/{{ like.id }}">{{ like.username }}</a></b></p>
 
-                <p class="img-caption"><b>{{ post.user.username }}</b> {{ post.caption }}</p>
+                <p class="img-caption"><b>{{ post.user_username }}</b> {{ post.caption }}</p>
                 <p class="img-comments" ng-repeat="comment in post.comments">
-                    <b>{{ comment.user.username }}</b> {{ comment.content }}
+                    <b>{{ comment.user.username }}</b> {{ comment.text }}
                 </p>
 
                 <input type="text" placeholder="Add a comment">
