@@ -1,82 +1,40 @@
 angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
-.controller('HomeCtrl', function($scope, Posts, $http) {
-    $scope.posts = Posts.all();
-    $scope.remove = function(post) {
-        Posts.remove(post);
+.controller('AppCtrl', function($scope, $state, $ionicPopup, UserService) {
+
+    console.log(UserService.isAuthenticated);
+    console.log(UserService.user);
+    if (UserService.isAuthenticated) {
+        $scope.user = UserService.user;
+        $state.go('app.home', {}, {reload: true});
+            console.log("check Auth");
+    } else {
+        $state.go('login', {}, {reload: true});
+            console.log("check Auth2");
     }
 
-    var newUser = {
-        id: "1",
-        email: "abc@d.com",
-        username: "iOS 7, upgradable to iOS 7.1",
-        password: "abcdef"
-    };
+})
 
-    var loginUser = {
-        email: "abc@d.com",
-        password: "abcdef"
-    };
+.controller('RegisterCtrl', function($scope) {
 
-    // register
-    // $http({
-    //     method: 'POST',
-    //     url: 'http://localhost:3000/api/user/register', 
-    //     data: newUser,
-    //     headers: {'Content-Type': 'application/json'}
-    // })
-    // .success(function(data) {
-    //     console.log("post new user success");
-    //     console.log(data);
-    // })
-    // .error(function(msg) {
-    //     console.log("can not post new user");
-    //     console.log(msg.error);
-    //     console.log(msg.message);
-    // });
+})
 
-    // log in
-    $http({
-        method: 'POST',
-        url: 'http://localhost:3000/api/user/login', 
-        data: loginUser,
-        headers: {'Content-Type': 'application/json'}
-    })
-    .success(function(data) {
-        console.log("post login user success");
-        console.log(data);
-    })
-    .error(function(msg) {
-        console.log("can not post login user");
-        console.log(msg.error);
-    });
+.controller('LoginCtrl', function($scope, $state, $ionicPopup, UserService) {
+    $scope.user = {email: "", password: ""};
 
-    // $http({
-    //     method: 'POST',
-    //     url: 'http://localhost:3000/product', 
-    //     data: testProduct,
-    //     headers: {'Content-Type': 'application/json'}
-    // })
-    // .success(function(data) {
-    //     console.log("post success");
-    //     console.log(data);
-    // })
-    // .error(function() {
-    //     console.log("can not send request");
-    // });
+    $scope.login = function() {
+        UserService.login($scope.user).then(function(res) {
+            $state.go('app.home', {}, {reload: true});
+        }, function(err) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Login failed!',
+                template: err.message
+            });
+        });
+    }
+})
 
-    // $http({
-    //     method: 'GET',
-    //     url: 'http://localhost:3000/products', 
-    //     headers: {'Content-Type': 'application/json'}
-    // })
-    // .success(function(data) {
-    //     console.log("get success");
-    //     console.log(data);
-    // })
-    // .error(function() {
-    //     console.log("can not fetch data");
-    // });
+.controller('HomeCtrl', function($scope) {
 
 })
 
@@ -94,6 +52,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 })
 
-.controller('AccountCtrl', function($scope, $ionicNavBarDelegate) {
+.controller('AccountCtrl', function($scope) {
 
 });

@@ -1,0 +1,18 @@
+<ion-view class="login">
+    <div class="bar bar-header bar-stable">
+        <h1 class="title">Login Instagram</h1>
+    </div>
+
+    <ion-content class="padding main-content" style="text-align: center;">
+        <div class="list list-inset">
+            <label class="item item-input">
+                <input type="text" placeholder="Email" ng-model="user.email">
+            </label>
+            <label class="item item-input">
+                <input type="password" placeholder="Password" ng-model="user.password">
+            </label>
+        </div>
+        <button class="button button-block button-positive" ng-click="login()">Go to app</button>
+        <a href="#/register">Want to register a new account?</a>
+    </ion-content>
+</ion-view>

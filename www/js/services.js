@@ -1,90 +1,68 @@
-angular.module('instagram.services', [])
+angular.module('instagram.services', ['ionic', 'instagram.constant'])
 
-.factory('Posts', function() {
+.factory('UserService', function($q, $http, URL) {
+    var LOCAL_TOKEN_KEY = 'localToken';
+    var LOCAL_USER_KEY  = 'Instagram User';
+    var isAuthenticated = false;
 
-    var posts = [{
-        id: 0,
-        user: {
-            id: 0,
-            username: "Mary",
-            profile_img: "img/ionic.png"
-        },
-        created_time: new Date(),
-        image: "img/img.jpg",
-        caption: "Description for post 1",
-        likes: ["user1", "user2", "user3"],
-        comments: [{
-            user: {
-                id: 1,
-                username: "user1",
-                profile_img: "img/ionic.png"
-            },
-            content: "Comment by user1"
-        }, {
-            user: {
-                id: 2,
-                username: "user2",
-                profile_img: "img/ionic.png"
-            },
-            content: "Comment by user2"
-        }, {
-            user: {
-                id: 0,
-                username: "user3",
-                profile_img: "img/ionic.png"
-            },
-            content: "Comment by user3"
-        }]
-
-    }, {
-        id: 1,
-        user: {
-            id: 1,
-            username: "Rose",
-            profile_img: "img/ionic.png"
-        },
-        created_time: new Date(),
-        image: "img/img.jpg",
-        caption: "Description for post 2",
-        likes: ["user1", "user2", "user3"],
-        comments: [{
-            user: {
-                id: 1,
-                username: "user1",
-                profile_img: "img/ionic.png"
-            },
-            content: "Comment by user1"
-        }, {
-            user: {
-                id: 2,
-                username: "user2",
-                profile_img: "img/ionic.png"
-            },
-            content: "Comment by user2"
-        }, {
-            user: {
-                id: 0,
-                username: "user3",
-                profile_img: "img/ionic.png"
-            },
-            content: "Comment by user3"
-        }]
-    }];
-
-    return {
-        all: function() {
-            return posts;
-        },
-        remove: function(post) {
-            posts.splice(posts.indexOf(chat), 1);
-        },
-        get: function(post_id) {
-            for (var i = 0; i < posts.length; i++) {
-                if (posts[i].id == parseInt(post_id)) {
-                    return posts[i];
-                }
-            }
-            return null;
+    var loadUserCredentials = function() {
+        var getToken = window.localStorage.getItem(LOCAL_TOKEN_KEY);
+        var getUser  = window.localStorage.getItem(LOCAL_USER_KEY);
+        if (!!getToken) {
+            useCredentials(getToken, getUser);
         }
     }
+
+    var storeUserCredentials = function(getToken, getUser) {
+        window.localStorage.setItem(LOCAL_TOKEN_KEY, getToken);
+        window.localStorage.setItem(LOCAL_USER_KEY, getUser.username);
+        useCredentials(getToken);
+    }
+
+    var useCredentials = function(getToken, getUser) {
+        try {
+            this.user = JSON.parse(getUser);
+        } catch(err) {
+            this.user = null;
+        }
+        
+        $http.defaults.headers.common['x-access-token'] = getToken;
+    }
+
+    var destroyUserCredentials = function() {
+        isAuthenticated = false;
+        this.user = undefined;
+        $http.defaults.headers.common['x-access-token'] = undefined;
+        window.localStorage.removeItem(LOCAL_TOKEN_KEY);
+        window.localStorage.removeItem(LOCAL_USER_KEY);
+    }
+
+    var login = function(data) {
+        return $q(function (resolve, reject) {
+
+            $http.post(URL.base + URL.authenticate, data)
+                .success(function (res) {
+                    isAuthenticated = true;
+                    storeUserCredentials(res.token, res.user);
+                    console.log(res.message);
+                    resolve('Login success');
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });        
+    }
+
+    var logout = function() {
+        destroyUserCredentials();
+    };
+
+    loadUserCredentials();
+
+    return {
+        login: login,
+        logout: logout,
+        isAuthenticated: isAuthenticated,
+        user: this.user
+    };
 })

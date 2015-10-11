@@ -24,6 +24,18 @@ app.run(function($ionicPlatform) {
 app.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
 
+        .state('register', {
+            url: '/register',
+            templateUrl: 'templates/register.html',
+            controller: 'RegisterCtrl'
+        })
+
+        .state('login', {
+            url: '/login',
+            templateUrl: 'templates/login.html',
+            controller: 'LoginCtrl'
+        })
+
         .state('app', {
             url: '/app',
             absract: true,
@@ -172,11 +184,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
         .state('camera', {
             url: '/camera',
-            absract: true,
             templateUrl: 'templates/camera.html',
         })
         ;
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/home');
+    $urlRouterProvider.otherwise(function ($injector, $location) {
+        var $state = $injector.get("$state");
+        $state.go("app.home");
+    });
 });
