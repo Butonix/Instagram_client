@@ -53,18 +53,16 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     }
 })
 
-.controller('HomeCtrl', function($scope, $state, $ionicPopup, PostService, UserService, AuthService) {
+.controller('HomeCtrl', function($scope, $state, $ionicPopup, PostService, UserService) {
     $scope.refresh = function() {
         PostService.newFeeds().then(function (res) {
             $scope.posts = res;
 
             for (var i = 0; i < $scope.posts.length; i++) {
                 (function(j) {
-                    UserService.loadUser($scope.posts[j].user_id).then(function (res) {
-                        console.log(j);               
+                    UserService.loadUser($scope.posts[j].user_id).then(function (res) {              
                         $scope.posts[j].user_username = res.username;
-                        $scope.posts[j].user_avatar = res.avatar;
-                        
+                        $scope.posts[j].user_avatar = res.avatar;                        
                     }, function (err) {
                         var alertPopup = $ionicPopup.alert({
                             title: 'Can not load author\'post!',
@@ -72,9 +70,31 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                         });
                     });
 
-                    // CommentService.
-                }(i));
-                
+                    for (var a = 0; a < $scope.posts[j].likes.length; a++) {
+                        (function(b) {
+                            UserService.loadUser($scope.posts[j].likes[b]).then(function (res) {              
+                                $scope.posts[j].likes[b] = {};
+                                $scope.posts[j].likes[b].username = res.username;
+                                $scope.posts[j].likes[b].id = res._id;
+                                console.log(res.username);                       
+                            }, function (err) {
+                                var alertPopup = $ionicPopup.alert({
+                                    title: 'Can not load liker!',
+                                    template: err.message
+                                });
+                            });
+                        }(a));             
+                    }
+
+                    PostService.loadComments($scope.posts[j]._id).then(function (res) {              
+                        $scope.posts[j].comments = res;                        
+                    }, function (err) {
+                        var alertPopup = $ionicPopup.alert({
+                            title: 'Can not load comment!',
+                            template: err.message
+                        });
+                    });
+                }(i));                
             }
 
         }, function (err) {

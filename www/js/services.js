@@ -118,18 +118,11 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         }); 
     }
 
-    return {
-        newFeeds: loadNewfeeds
-    };
-})
-
-.factory('CommentService', function($q, $http, URL, AuthService) {
     var loadComments = function(getPost) {
         return $q(function (resolve, reject) {
 
             $http.get(URL.base + URL.postComment + '/' + getPost)
                 .success(function (res) {
-                    console.log(res);
                     resolve(res);
                 })
                 .error(function (err) {
@@ -137,4 +130,9 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
                 });
         });
     }
+
+    return {
+        newFeeds: loadNewfeeds,
+        loadComments: loadComments
+    };
 })

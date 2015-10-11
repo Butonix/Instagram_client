@@ -25,7 +25,7 @@
             </div>
 
             <div class="item item-body">
-                <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"><a href="#/app/user/{{ like.id }}">{{ like.username }}</a></b></p>
+                <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"><a href="#/app/user/{{ like.id }}"> {{ like.username }}</a>,</b></p>
 
                 <p class="img-caption"><b>{{ post.user_username }}</b> {{ post.caption }}</p>
                 <p class="img-comments" ng-repeat="comment in post.comments">
