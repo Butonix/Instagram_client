@@ -21,7 +21,9 @@ app.run(function($ionicPlatform) {
 });
 
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+    $ionicConfigProvider.tabs.position("bottom");
+    $ionicConfigProvider.tabs.style("standard");
     $stateProvider
 
         .state('register', {

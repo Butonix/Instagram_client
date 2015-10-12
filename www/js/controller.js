@@ -2,16 +2,23 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 .controller('AppCtrl', function($scope, $state, $ionicPopup, AuthService) {
 
-    console.log(AuthService.isAuthenticated);
-    console.log('currentUser: ' + AuthService.user);
-    if (AuthService.isAuthenticated) {
-        $scope.user = AuthService.user;
+    // console.log(AuthService.isAuthenticated);
+    // console.log('currentUser: ' + AuthService.user);
+    // if (AuthService.isAuthenticated) {
+    //     $scope.user = AuthService.user;
+    //     $state.go('app.home', {}, {reload: true});
+    //         console.log("check Auth");
+    // } else {
+    //     $state.go('login', {}, {reload: true});
+    //         console.log("check Auth2");
+    // }
+
+    AuthService.checkAuth().then(function (res) {
+        AuthService.user = res.user;
         $state.go('app.home', {}, {reload: true});
-            console.log("check Auth");
-    } else {
+    }, function (err) {
         $state.go('login', {}, {reload: true});
-            console.log("check Auth2");
-    }
+    });
 
 })
 
@@ -75,8 +82,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                             UserService.loadUser($scope.posts[j].likes[b]).then(function (res) {              
                                 $scope.posts[j].likes[b] = {};
                                 $scope.posts[j].likes[b].username = res.username;
-                                $scope.posts[j].likes[b].id = res._id;
-                                console.log(res.username);                       
+                                $scope.posts[j].likes[b].id = res._id;                      
                             }, function (err) {
                                 var alertPopup = $ionicPopup.alert({
                                     title: 'Can not load liker!',
@@ -123,6 +129,21 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 })
 
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope, $state, $ionicPopup, PostService, AuthService) {
+    $scope.account = function() {
+        $scope.user = AuthService.user;
+        console.log($scope.user);
+    }
 
+    $scope.getPost = function() {
+        PostService.loadPosts().then(function (res) {
+            $scope.posts = res;
+            console.log($scope.posts);
+        }, function (err) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Can not load posts!',
+                template: err.message
+            });
+        });
+    }
 });

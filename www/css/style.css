@@ -63,7 +63,7 @@ a:hover, a:focus {
     border-top: solid 1px #eeeeee;
     border-bottom: solid 1px #eeeeee;
     position: relative;
-    padding-top: 0;
+    padding-top: 6px;
 }
 
 .account .list.user-info {

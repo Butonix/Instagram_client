@@ -1,10 +1,10 @@
-<ion-view class="account">
+<ion-view class="account" ng-init="account()">
     <!-- <ion-nav-bar class="nav-title-slide-ios7 bar-positive">
         <ion-nav-back-button class="button-icon ion-arrow-left-c">
         </ion-nav-back-button>
     </ion-nav-bar> -->
     <div class="bar bar-header bar-positive">
-        <h1 class="title">User name</h1>
+        <h1 class="title">{{ user.username }}</h1>
         <div class="buttons">
             <a href="#/app/option" class="button icon ion-ios-gear button-clear button-white"></a>
         </div>
@@ -14,11 +14,11 @@
 
         <div class="list user-info">
             <div class="item item-avatar">
-                <img src="/img/ionic.png">
+                <img src="{{ user.avatar }}">
                 <div class="row">
-                    <div class="col col-33"><a href="#"><h2>3</h2><p>posts</p></a></div>
-                    <div class="col col-33"><a href="#"><h2>3</h2><p>followers</p></a></div>
-                    <div class="col col-33"><a href="#"><h2>3</h2><p>following</p></a></div>
+                    <div class="col col-33"><a href="#"><h2>{{ user.countPosts }}</h2><p>posts</p></a></div>
+                    <div class="col col-33"><a href="#"><h2>{{ user.countFollowers }}</h2><p>followers</p></a></div>
+                    <div class="col col-33"><a href="#"><h2>{{ user.countFollowings }}</h2><p>following</p></a></div>
                 </div>
                 <a href="#/app/edit"><button class="button button-block button-stable">Edit your profile</button></a>
             </div>

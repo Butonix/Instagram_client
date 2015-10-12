@@ -25,7 +25,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         } catch(err) {
             this.user = null;
         }
-        
+        isAuthenticated = true;        
         $http.defaults.headers.common['x-access-token'] = getToken;
     }
 
@@ -42,7 +42,6 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
 
             $http.post(URL.base + URL.authenticate, data)
                 .success(function (res) {
-                    isAuthenticated = true;
                     storeUserCredentials(res.token, res.user);
                     resolve(res.user.username);
                     console.log('currentUser2: ' + res.user.username);
@@ -71,18 +70,33 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         });
     }
 
+    var checkAuth = function() {
+        return $q(function (resolve, reject) {
+
+            $http.get(URL.base + URL.authenticate)
+                .success(function (res) {
+                    this.user = res.user;
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });
+    }
+
     loadUserCredentials();
 
     return {
         login: login,
         logout: logout,
         register: register,
+        checkAuth: checkAuth,
         isAuthenticated: isAuthenticated,
         user: this.user
     };
 })
 
-.factory('UserService', function($q, $http, URL, AuthService) {
+.factory('UserService', function($q, $http, URL) {
     var loadUser = function(user_id) {
         return $q(function (resolve, reject) {
 
@@ -104,7 +118,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
     };
 })
 
-.factory('PostService', function($q, $http, URL, AuthService) {
+.factory('PostService', function($q, $http, URL) {
     var loadNewfeeds = function() {
         return $q(function (resolve, reject) {
 
@@ -131,8 +145,24 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         });
     }
 
+    var loadPosts = function(user_id) {
+        return $q(function (resolve, reject) {
+            if (!user_id) reqURL = URL.base + URL.postRead;
+            else reqURL = URL.base + URL.postUser + '/' + user_id;
+
+            $http.get(reqURL)
+                .success(function (res) {
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });
+    } 
+
     return {
         newFeeds: loadNewfeeds,
-        loadComments: loadComments
+        loadComments: loadComments,
+        loadPosts: loadPosts
     };
 })

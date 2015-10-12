@@ -1,12 +1,11 @@
-<ion-view style="position: relative;">
-    <div class="row">
-        <div class="col col-33"><img src="img/img.jpg" width="100%"></div>
-        <div class="col col-33"><img src="img/ionic.png" width="100%"></div>
-        <div class="col col-33"><img src="img/ionic.png" width="100%"></div>
+<ion-view style="position: relative;" ng-init="getPost()">
+
+    <div ng-repeat="post in posts">
+        <div class="row" ng-if="$even">
+            <div class="col col-33"><img src="{{ posts[$index].image }}" width="100%"></div>
+            <div class="col col-33" ng-if="$index > 0"><img src="{{ posts[$index + 1].image }}" width="100%"></div>
+            <div class="col col-33" ng-if="$index > 0"><img src="{{ posts[$index + 2].image }}" width="100%"></div>
+        </div>
     </div>
-    <div class="row">
-        <div class="col col-33"><img src="img/img.jpg" width="100%"></div>
-        <div class="col col-33"><img src="img/ionic.png" width="100%"></div>
-        <div class="col col-33"><img src="img/ionic.png" width="100%"></div>
-    </div>
+
 </ion-view>
