@@ -201,11 +201,16 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
 
     var postComment = function(getPost, getComment) {
         var data = {text: getComment};
+        console.log(getPost.comments);
         return $q(function (resolve, reject) {
 
             $http.post(URL.base + URL.postComment + '/' + getPost._id, data)
                 .success(function (res) {
-                    getPost.comments.unshift(res.comment);
+                    console.log(res.comment);
+                    console.log(getPost.comments);
+                    getPost.comments.push(res.comment);
+                    
+                    console.log(getPost.comments);
                     resolve(res.comment);
                 })
                 .error(function (err) {

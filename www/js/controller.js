@@ -106,6 +106,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
                     PostService.loadComments($scope.posts[j]._id).then(function (res) {              
                         $scope.posts[j].comments = res;
+                        console.log($scope.posts[j].comments);
                     }, function (err) {
                         var alertPopup = $ionicPopup.alert({
                             title: 'Can not load comment!',
