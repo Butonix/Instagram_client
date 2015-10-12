@@ -159,11 +159,68 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
                     reject(err);
                 });
         });
-    } 
+    }
+
+    var like = function(getPost) {
+        return $q(function (resolve, reject) {
+
+            $http.post(URL.base + URL.postLike + '/' + getPost)
+                .success(function (res) {
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });  
+    }
+
+    var unlike = function(getPost) {
+        return $q(function (resolve, reject) {
+
+            $http.put(URL.base + URL.postLike + '/' + getPost)
+                .success(function (res) {
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });  
+    }
+
+    var toggleLike = function(getPost) {
+        if (getPost.tickLike === false) {
+            like(getPost._id).then(function() {
+                getPost.tickLike = true;
+            });
+        } else {
+            unlike(getPost._id).then(function() {
+                getPost.tickLike = false;
+            });
+        }
+    }
+
+    var postComment = function(getPost, getComment) {
+        var data = {text: getComment};
+        return $q(function (resolve, reject) {
+
+            $http.post(URL.base + URL.postComment + '/' + getPost._id, data)
+                .success(function (res) {
+                    getPost.comments.unshift(res.comment);
+                    resolve(res.comment);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });
+    }
 
     return {
         newFeeds: loadNewfeeds,
         loadComments: loadComments,
-        loadPosts: loadPosts
+        loadPosts: loadPosts,
+        like: like,
+        unlike: unlike,
+        toggleLike: toggleLike,
+        postComment: postComment
     };
 })

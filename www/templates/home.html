@@ -24,21 +24,26 @@
             </div>
 
             <div class="item tabs tabs-secondary tabs-icon-left">
-                <a href="" class="tab-item"><i class="icon ion-ios-heart-outline"></i></a>
-                <a href="" class="tab-item"><i class="icon ion-ios-chatbubble-outline"></i></a>
-                <a href="" class="tab-item"><i class="icon ion-share"></i></a>
-                <a href="" class="tab-item"><i class="icon ion-android-more-vertical"></i></a>
+                <a class="tab-item"><i ng-class="{'icon ion-ios-heart-outline': !post.tickLike, 'icon ion-ios-heart': post.tickLike}" ng-click="toggleLike(post)"></i></a>
+                <a class="tab-item"><i class="icon ion-ios-chatbubble-outline"></i></a>
             </div>
 
             <div class="item item-body">
-                <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"><a href="#/app/user/{{ like.id }}"> {{ like.username }}</a>,</b></p>
+                <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"><a href="#/app/home-user/{{ like.userid }}"> {{ like.username }}</a>,</b></p>
 
                 <p class="img-caption"><b>{{ post.user.username }}</b> {{ post.caption }}</p>
                 <p class="img-comments" ng-repeat="comment in post.comments">
                     <b>{{ comment.user.username }}</b> {{ comment.text }}
                 </p>
 
-                <input type="text" placeholder="Add a comment">
+                <div class="item item-input-inset">
+                    <label class="item-input-wrapper">
+                        <input type="text" placeholder="Add a comment" ng-model="comment.text">
+                    </label>
+                    <button class="button button-small" ng-click="postComment(post)">
+                        Send
+                    </button>
+                </div>
             </div>
 
         </div>

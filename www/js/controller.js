@@ -61,6 +61,8 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 })
 
 .controller('HomeCtrl', function($scope, $state, $ionicPopup, PostService, UserService, AuthService) {
+    $scope.comment = {text: ""};
+
     console.log("Homectrl");
     $scope.refresh = function() {
         PostService.newFeeds().then(function (res) {
@@ -82,10 +84,17 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
                     for (var a = 0; a < $scope.posts[j].likes.length; a++) {
                         (function(b) {
+                            $scope.posts[j].tickLike = false;
+
+                            if ($scope.posts[j].likes[b] === $scope.currentUser.userid) {
+                                $scope.posts[j].tickLike = true;
+                                
+                            }
+
                             UserService.loadUser($scope.posts[j].likes[b]).then(function (res) {              
                                 $scope.posts[j].likes[b] = {};
                                 $scope.posts[j].likes[b].username = res.username;
-                                $scope.posts[j].likes[b].id = res._id;                      
+                                $scope.posts[j].likes[b].userid = res._id;
                             }, function (err) {
                                 var alertPopup = $ionicPopup.alert({
                                     title: 'Can not load liker!',
@@ -96,7 +105,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                     }
 
                     PostService.loadComments($scope.posts[j]._id).then(function (res) {              
-                        $scope.posts[j].comments = res;                        
+                        $scope.posts[j].comments = res;
                     }, function (err) {
                         var alertPopup = $ionicPopup.alert({
                             title: 'Can not load comment!',
@@ -112,7 +121,14 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                 template: err.message
             });
         })
-        
+    }
+
+    $scope.postComment = function(getPost) {
+        PostService.postComment(getPost, $scope.comment.text);
+    }
+
+    $scope.toggleLike = function(getPost) {
+        PostService.toggleLike(getPost);
     }
 
     $scope.refresh();
