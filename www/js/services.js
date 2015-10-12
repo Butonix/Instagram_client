@@ -149,6 +149,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         return $q(function (resolve, reject) {
             if (!user_id) reqURL = URL.base + URL.postRead;
             else reqURL = URL.base + URL.postUser + '/' + user_id;
+            console.log(reqURL);
 
             $http.get(reqURL)
                 .success(function (res) {

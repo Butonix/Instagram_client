@@ -1,7 +1,6 @@
 angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 .controller('AppCtrl', function($scope, $state, $ionicPopup, AuthService) {
-
     // console.log(AuthService.isAuthenticated);
     // console.log('currentUser: ' + AuthService.user);
     // if (AuthService.isAuthenticated) {
@@ -15,6 +14,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     AuthService.checkAuth().then(function (res) {
         AuthService.user = res.user;
+        $scope.currentUser = AuthService.user;
         $state.go('app.home', {}, {reload: true});
     }, function (err) {
         $state.go('login', {}, {reload: true});
@@ -60,7 +60,8 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     }
 })
 
-.controller('HomeCtrl', function($scope, $state, $ionicPopup, PostService, UserService) {
+.controller('HomeCtrl', function($scope, $state, $ionicPopup, PostService, UserService, AuthService) {
+    console.log("Homectrl");
     $scope.refresh = function() {
         PostService.newFeeds().then(function (res) {
             $scope.posts = res;
@@ -68,8 +69,10 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
             for (var i = 0; i < $scope.posts.length; i++) {
                 (function(j) {
                     UserService.loadUser($scope.posts[j].user_id).then(function (res) {              
-                        $scope.posts[j].user_username = res.username;
-                        $scope.posts[j].user_avatar = res.avatar;                        
+                        $scope.posts[j].user = res;
+                        if ($scope.posts[j].user.userid == AuthService.user.userid) {
+                            console.log('right user');
+                        }       
                     }, function (err) {
                         var alertPopup = $ionicPopup.alert({
                             title: 'Can not load author\'post!',
@@ -129,13 +132,16 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 })
 
-.controller('AccountCtrl', function($scope, $state, $ionicPopup, PostService, AuthService) {
+.controller('AccountCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, AuthService, UserService) {
+    console.log('go Account');
+
     $scope.account = function() {
         $scope.user = AuthService.user;
         console.log($scope.user);
     }
 
     $scope.getPost = function() {
+                                    console.log('getpost');
         PostService.loadPosts().then(function (res) {
             $scope.posts = res;
             console.log($scope.posts);
@@ -145,5 +151,41 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                 template: err.message
             });
         });
+    }
+
+    $scope.refresh = function() {
+        $scope.account();
+        $scope.getPost();  
+    }
+})
+
+.controller('UsersCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, AuthService, UserService) {
+    console.log('go Users');
+    $scope.account = function() {
+        UserService.loadUser($stateParams.userid).then(function (res) {
+            $scope.user = res;
+        }, function (err) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Can not load user!',
+                template: err.message
+            });
+        })
+    }
+
+    $scope.getPost = function() {
+        PostService.loadPosts($stateParams.userid).then(function (res) {
+            $scope.posts = res;
+            console.log($scope.posts);
+        }, function (err) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Can not load posts!',
+                template: err.message
+            });
+        });
+    }
+
+    $scope.refresh = function() {
+        $scope.account();
+        $scope.getPost();  
     }
 });

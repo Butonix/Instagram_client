@@ -5,7 +5,7 @@
     </ion-nav-bar> -->
     <div class="bar bar-header bar-positive">
         <h1 class="title">{{ user.username }}</h1>
-        <div class="buttons">
+        <div class="buttons" ng-if="user.userid === currentUser.userid">
             <a href="#/app/option" class="button icon ion-ios-gear button-clear button-white"></a>
         </div>
     </div>
@@ -23,16 +23,26 @@
                 <a href="#/app/edit"><button class="button button-block button-stable">Edit your profile</button></a>
             </div>
         </div>
-        
-        <ion-tabs class="tabs-striped">
-            <ion-tab icon="ion-grid" href="#/app/account/grid">
+
+        <ion-tabs class="tabs-striped" ng-if="user.userid === currentUser.userid">
+            <ion-tab icon="ion-grid" ng-href="#/app/account/grid">
                 <ion-nav-view name="grid-img"></ion-nav-view>
             </ion-tab>
 
-            <ion-tab icon="ion-navicon-round" href="#/app/account/post">
+            <ion-tab icon="ion-navicon-round" ng-href="#/app/account/post">
                 <ion-nav-view name="post-img"></ion-nav-view>
             </ion-tab>
-        <ion-tabs>
+        </ion-tabs>
+
+        <ion-tabs class="tabs-striped" ng-if="user.userid !== currentUser.userid">
+            <ion-tab icon="ion-grid" ng-href="#/app/home-user/{{user.userid}}/grid">
+                <ion-nav-view name="users-grid"></ion-nav-view>
+            </ion-tab>
+
+            <ion-tab icon="ion-navicon-round" ng-href="#/app/home-user/{{user.userid}}/post">
+                <ion-nav-view name="users-post"></ion-nav-view>
+            </ion-tab>
+        </ion-tabs>
 
     </ion-content>
 

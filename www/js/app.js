@@ -28,12 +28,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('register', {
             url: '/register',
+            cache: false,
             templateUrl: 'templates/register.html',
             controller: 'RegisterCtrl'
         })
 
         .state('login', {
             url: '/login',
+            cache: false,
             templateUrl: 'templates/login.html',
             controller: 'LoginCtrl'
         })
@@ -46,6 +48,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.home', {
             url: '/home',
+            cache: false,
             views: {
                 'app-home': {
                 templateUrl: 'templates/home.html',
@@ -54,8 +57,42 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             }
         })
 
+        .state('app.home-user', {
+            url: '/home-user/:userid',
+            cache: false,
+            views: {
+                'app-home': {
+                templateUrl: 'templates/account.html',
+                controller: 'UsersCtrl'
+                }
+            }
+        })
+
+        .state('app.home-user.grid', {
+            url: '/grid',
+            cache: false,
+            views: {
+                'users-grid': {
+                templateUrl: 'templates/account-grid.html',
+                controller: 'UsersCtrl'
+                }
+            }
+        })
+
+        .state('app.home-user.post', {
+            url: '/post',
+            cache: false,
+            views: {
+                'users-post': {
+                templateUrl: 'templates/account-post.html',
+                controller: 'UsersCtrl'
+                }
+            }
+        })
+
         .state('app.search', {
             url: '/search',
+            cache: false,
             views: {
                 'app-search': {
                 templateUrl: 'templates/search.html',
@@ -66,6 +103,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.search.people', {
             url: '/people',
+            cache: false,
             views: {
                 'search-people': {
                 templateUrl: 'templates/search-people.html',
@@ -76,6 +114,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.search.tags', {
             url: '/tags',
+            cache: false,
             views: {
                 'search-tags': {
                 templateUrl: 'templates/search-tags.html',
@@ -86,6 +125,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.search.places', {
             url: '/places',
+            cache: false,
             views: {
                 'search-places': {
                 templateUrl: 'templates/search-places.html',
@@ -96,6 +136,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.camera', {
             url: '/camera',
+            cache: false,
             views: {
                 'app-camera': {
                 templateUrl: 'templates/activity.html',
@@ -106,6 +147,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.activity', {
             url: '/activity',
+            cache: false,
             views: {
                 'app-activity': {
                 templateUrl: 'templates/activity.html',
@@ -116,6 +158,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.activity.following', {
             url: '/following',
+            cache: false,
             views: {
                 'activity-following': {
                 templateUrl: 'templates/activity-following.html',
@@ -126,6 +169,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.activity.you', {
             url: '/you',
+            cache: false,
             views: {
                 'activity-you': {
                 templateUrl: 'templates/activity-you.html',
@@ -136,6 +180,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.account', {
             url: '/account',
+            cache: false,
             views: {
                 'app-account': {
                 templateUrl: 'templates/account.html',
@@ -166,6 +211,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.edit', {
             url: '/edit',
+            cache: false,
             views: {
                 'app-account': {
                 templateUrl: 'templates/account-edit.html',
@@ -176,6 +222,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('app.option', {
             url: '/option',
+            cache: false,
             views: {
                 'app-account': {
                 templateUrl: 'templates/account-option.html',
@@ -186,6 +233,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         .state('camera', {
             url: '/camera',
+            cache: false,
             templateUrl: 'templates/camera.html',
         })
         ;
