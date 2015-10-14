@@ -4,7 +4,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     AuthService.checkAuth().then(function (res) {
         AuthService.user = res.user;
-        $scope.currentUser = AuthService.user;
 
         $state.go('app.home', {}, {reload: true});
     }, function (err) {
@@ -38,7 +37,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     $scope.login = function() {
         AuthService.login($scope.user).then(function (res) {
             AuthService.user = res.user;
-            $scope.currentUser = AuthService.user;
 
             $state.go('app.home', {}, {reload: true});
             var alertPopup = $ionicPopup.alert({
@@ -55,6 +53,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 })
 
 .controller('HomeCtrl', function($scope, $state, $ionicPopup, PostService, UserService, AuthService) {
+    $scope.currentUser = AuthService.user;
     $scope.comment = {text: ""};
 
     $scope.refresh = function() {
@@ -68,7 +67,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                     for (var a = 0; a < $scope.posts[j].likes.length; a++) {
                         (function(b) {
 
-                            if ($scope.posts[j].likes[b] === $scope.currentUser.userid) {
+                            if ($scope.posts[j].likes[b] === AuthService.user.userid) {
                                 $scope.posts[j].tickLike = true;                                
                             }
 
@@ -116,6 +115,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 })
 
 .controller('SearchCtrl', function($scope, $state, $ionicPopup, PostService, UserService, AuthService) {
+    $scope.currentUser = AuthService.user;
     $scope.searchText = "";
     $scope.results = [];
     $scope.message = "";
@@ -142,9 +142,9 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                 (function(j) {
                     $scope.results[j].tickFollow = false;
 
-                    for (var a = 0; a < $scope.currentUser.followings.length; a++) {
+                    for (var a = 0; a < AuthService.user.followings.length; a++) {
                         (function(b) {
-                            if ($scope.currentUser.followings[b] === $scope.results[j].userid) {
+                            if (AuthService.user.followings[b] === $scope.results[j].userid) {
                                 $scope.results[j].tickFollow = true;                                
                             }
                         }(a));             
@@ -173,7 +173,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         return $scope.image !== "";
     };
 
-    $scope.picker = function() {
+    $scope.pick = function() {
         var options = {
             maximumImagesCount: 1,
             width: 800,
@@ -186,7 +186,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                 $scope.image = results[0];
             }, function(err) {
                 $ionicPopup.alert({
-                    title: 'Image picking failure',
+                    title: 'Failed to get image from gallery',
                     template: 'Failed on picking an image to post.'
                 });
             });
@@ -198,28 +198,25 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
             sourceType: Camera.PictureSourceType.CAMERA
         };
 
-        $cordovaCamera.getPicture(options).then(function (imageURI) {
-            $scope.image = imageURI;
+        $cordovaCamera.getPicture(options).then(function (path) {
+            $scope.image = path;
         }, function (err) {
             $ionicPopup.alert({
                 title: 'Capture failure',
-                template: 'Failed on capture an image to post.'
+                template: 'Cannot upload picture!'
             });
         });
     };
 
     $scope.post = function() {
-        $rootScope.show('Please wait...');
 
         PostService.postPost($scope.img, $scope.data)
             .then(function (res) {
-                $rootScope.hide();
-                $state.go('tab.home', {}, {reload: true});
+                $state.go('app.home', {}, {reload: true});
             }, function (err) {
-                $rootScope.hide();
                 $ionicPopup.alert({
-                    title: 'Post failure',
-                    template: 'There were some problems with posting'
+                    title: 'Upload picture failed!',
+                    template: 'Please check your camera!'
                 });
             });
     };
@@ -227,7 +224,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 .controller('EditCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService, AuthService) {
     $scope.user = AuthService.user;
-    console.log(AuthService.user);
     $scope.user.oldPassword = "";
     $scope.user.newPassword = "";
     $scope.user.repeatPassword = "";
@@ -251,8 +247,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
             }
         }
 
-        console.log(editUser);
-
         UserService.editUser(editUser).then(function (res) {
             $scope.user = res.user;
             console.log(res.user);
@@ -267,7 +261,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         }, function (err) {
             $ionicPopup.alert({
                 title: 'Edit Profile failure!',
-                template: res.message
+                template: err.message
             });
         });
     }
@@ -276,9 +270,11 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 .controller('AccountCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService, AuthService) {
     $scope.comment = {text: ""};
+    $scope.currentUser = AuthService.user;
 
     $scope.account = function() {
-        $scope.user = $scope.currentUser;
+        $scope.user = AuthService.user;
+            console.log($scope.user);
     }
 
     $scope.getPost = function() {
@@ -293,7 +289,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                         (function(b) {
                             $scope.posts[j]._id = $scope.posts[j].id;
 
-                            if ($scope.posts[j].likes[b] === $scope.currentUser.userid) {
+                            if ($scope.posts[j].likes[b] === AuthService.user.userid) {
                                 $scope.posts[j].tickLike = true;                                
                             }
 
@@ -340,7 +336,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.logout = function() {
         AuthService.logout();
-        $scope.currentUser = undefined;
+        AuthService.user = undefined;
         $state.go('login', {}, {reload: true});
     }
 
@@ -354,16 +350,17 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 .controller('UsersCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService, AuthService) {
     $scope.comment = {text: ""};
+    $scope.currentUser = AuthService.user;
 
     $scope.account = function() {
         UserService.loadUser($stateParams.userid).then(function (res) {
             $scope.user = res;
             $scope.user.tickFollow = false;
 
-                for (var a = 0; a < $scope.currentUser.followings.length; a++) {
+                for (var a = 0; a < AuthService.user.followings.length; a++) {
                     (function(b) {
 
-                        if ($scope.currentUser.followings[b] === $scope.user.userid) {
+                        if (AuthService.user.followings[b] === $scope.user.userid) {
                             $scope.user.tickFollow = true;                                
                         }
                     }(a));             
@@ -389,7 +386,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                             $scope.posts[j].tickLike = false;
                             $scope.posts[j]._id = $scope.posts[j].id;
 
-                            if ($scope.posts[j].likes[b] === $scope.currentUser.userid) {
+                            if ($scope.posts[j].likes[b] === AuthService.user.userid) {
                                 $scope.posts[j].tickLike = true;                                
                             }
 
@@ -456,6 +453,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 })
 
 .controller('FollowCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService, AuthService) {
+    $scope.currentUser = AuthService.user;
     $scope.user = {};
 
     $scope.loadFollowers = function() {
@@ -466,10 +464,10 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                 (function(j) {
                     $scope.follows[j].tickFollow = false;
 
-                    for (var a = 0; a < $scope.currentUser.followings.length; a++) {
+                    for (var a = 0; a < AuthService.user.followings.length; a++) {
                         (function(b) {
 
-                            if ($scope.currentUser.followings[b] === $scope.follows[j].userid) {
+                            if (AuthService.user.followings[b] === $scope.follows[j].userid) {
                                 $scope.follows[j].tickFollow = true;                                
                             }
                         }(a));             
@@ -493,9 +491,9 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                 (function(j) {
                     $scope.follows[j].tickFollow = false;
 
-                    for (var a = 0; a < $scope.currentUser.followings.length; a++) {
+                    for (var a = 0; a < AuthService.user.followings.length; a++) {
                         (function(b) {
-                            if ($scope.currentUser.followings[b] === $scope.follows[j].userid) {
+                            if (AuthService.user.followings[b] === $scope.follows[j].userid) {
                                 $scope.follows[j].tickFollow = true;                                
                             }
                         }(a));             
@@ -536,7 +534,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                 });
             });
         } else {
-            $scope.user = $scope.currentUser;
+            $scope.user = AuthService.user;
             $scope.checkState();
         }
     }

@@ -1,14 +1,15 @@
-<ion-view view-title="Camera">
+<ion-view>
 	<div class="bar bar-header bar-positive">
         <h1 class="title">Camera</h1>
     </div>
-	<ion-content>
+
+	<ion-content class="main-content">
 	    <div class="list card pick-image">
 	        <div class="item">
 	            <img ng-src="{{image}}" id="myImage"/>
 	            <div class="button-bar">
 	              <button class="button" ng-click="camera()">From Camera</button>
-	              <button class="button" ng-click="picker()">From Gallery</button>
+	              <button class="button" ng-click="pick()">From Gallery</button>
 	            </div>
 	        </div>
 

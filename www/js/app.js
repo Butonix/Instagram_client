@@ -271,6 +271,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         .state('app.edit', {
             url: '/edit',
             cache: false,
+            reload: true,
             views: {
                 'app-account': {
                 templateUrl: 'templates/account-edit.html',
