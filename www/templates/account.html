@@ -6,7 +6,9 @@
         </div>
         <h1 class="title">{{ user.username }}</h1>
         <div class="buttons" ng-if="user.userid === currentUser.userid">
-            <a href="#/app/option" class="button icon ion-ios-gear button-clear button-white"></a>
+            <a class="button button-clear button-white" ng-click="logout()">
+                <i class=""><b>Logout </i><i class="ion-log-out"></b></i>
+            </a>
         </div>
     </div>
 
@@ -18,18 +20,22 @@
 
                 <div class="row" ng-if="user.userid === currentUser.userid">
                     <div class="col col-33"><a><h2>{{ user.countPosts }}</h2><p>posts</p></a></div>
-                    <div class="col col-33"><a href="#/app/followers"><h2>{{ user.countFollowers }}</h2><p>followers</p></a></div>
-                    <div class="col col-33"><a href="#/app/followings"><h2>{{ user.countFollowings }}</h2><p>following</p></a></div>
+                    <div class="col col-33"><a href="#/app/{{prefix}}followers"><h2>{{ user.countFollowers }}</h2><p>followers</p></a></div>
+                    <div class="col col-33"><a href="#/app/{{prefix}}followings"><h2>{{ user.countFollowings }}</h2><p>following</p></a></div>
                 </div>
 
                 <div class="row" ng-if="user.userid !== currentUser.userid">
                     <div class="col col-33"><a><h2>{{ user.countPosts }}</h2><p>posts</p></a></div>
-                    <div class="col col-33"><a href="#/app/home-user-followers/{{user.userid}}"><h2>{{ user.countFollowers }}</h2><p>followers</p></a></div>
-                    <div class="col col-33"><a href="#/app/home-user-followings/{{user.userid}}"><h2>{{ user.countFollowings }}</h2><p>following</p></a></div>
+                    <div class="col col-33"><a href="#/app/{{prefix}}followers/{{user.userid}}"><h2>{{ user.countFollowers }}</h2><p>followers</p></a></div>
+                    <div class="col col-33"><a href="#/app/{{prefix}}followings/{{user.userid}}"><h2>{{ user.countFollowings }}</h2><p>following</p></a></div>
                 </div>
 
                 <a href="#/app/edit" ng-if="user.userid === currentUser.userid"><button class="button button-block button-stable">Edit your profile</button></a>
-                <a class="button button-outline button-positive" ng-if="user.userid !== currentUser.userid"><i class="ion-plus"></i><i class="ion-person"></i></a>
+                <a ng-if="user.userid !== currentUser.userid" ng-class="{
+                    'button button-outline button-positive': !user.tickFollow,
+                    'button button-outline button-checked': user.tickFollow}" ng-click="toggleFollow(user)">
+                    <i class="ion-plus"></i><i class="ion-person"></i>
+                </a>
             </div>
         </div>
 

@@ -107,36 +107,42 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             }
         })
 
-        .state('app.search.people', {
-            url: '/people',
+        .state('app.search-user', {
+            url: '/search-user/:userid',
             cache: false,
             views: {
-                'search-people': {
-                templateUrl: 'templates/search-people.html',
-                controller: 'SearchCtrl'
+                'app-home': {
+                templateUrl: 'templates/account.html',
+                controller: 'UsersCtrl'
                 }
             }
         })
 
-        .state('app.search.tags', {
-            url: '/tags',
+        .state('app.search-user-followers', {
+            url: '/search-user-followers/:userid',
             cache: false,
             views: {
-                'search-tags': {
-                templateUrl: 'templates/search-tags.html',
-                controller: 'SearchCtrl'
+                'app-home': {
+                templateUrl: 'templates/follow.html',
+                controller: 'FollowCtrl'
                 }
+            },
+            data: {
+                header: 'followers'
             }
         })
 
-        .state('app.search.places', {
-            url: '/places',
+        .state('app.search-user-followings', {
+            url: '/search-user-followings/:userid',
             cache: false,
             views: {
-                'search-places': {
-                templateUrl: 'templates/search-places.html',
-                controller: 'SearchCtrl'
+                'app-home': {
+                templateUrl: 'templates/follow.html',
+                controller: 'FollowCtrl'
                 }
+            },
+            data: {
+                header: 'followings'
             }
         })
 
@@ -196,7 +202,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         })
 
         .state('app.account-followers', {
-            url: '/followers',
+            url: '/account-followers',
             cache: false,
             views: {
                 'app-account': {
@@ -210,7 +216,46 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         })
 
         .state('app.account-followings', {
-            url: '/followings',
+            url: '/account-followings',
+            cache: false,
+            views: {
+                'app-account': {
+                templateUrl: 'templates/follow.html',
+                controller: 'FollowCtrl'
+                }
+            },
+            data: {
+                header: 'followings'
+            }
+        })
+
+        .state('app.account-user', {
+            url: '/account-user/:userid',
+            cache: false,
+            views: {
+                'app-account': {
+                templateUrl: 'templates/account.html',
+                controller: 'UsersCtrl'
+                }
+            }
+        })
+
+        .state('app.account-user-followers', {
+            url: '/account-user-followers/:userid',
+            cache: false,
+            views: {
+                'app-account': {
+                templateUrl: 'templates/follow.html',
+                controller: 'FollowCtrl'
+                }
+            },
+            data: {
+                header: 'followers'
+            }
+        })
+
+        .state('app.account-user-followings', {
+            url: '/account-user-followings/:userid',
             cache: false,
             views: {
                 'app-account': {

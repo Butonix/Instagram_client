@@ -24,7 +24,8 @@ a:hover, a:focus {
     border-radius: 1px;
 }
 
-.follow .button.button-positive.button-outline {
+.follow .button.button-positive.button-outline,
+.search .button.button-positive.button-outline {
     position: absolute;
     top: 22px;
     right: 8px;
@@ -32,6 +33,18 @@ a:hover, a:focus {
     min-height: 32px;
     line-height: 30px;
     padding-top: 5px;
+}
+
+.follow .list.card > .item-avatar > a > img,
+.search .list.card > .item-avatar > a > img {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    max-width: 40px;
+    max-height: 40px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
 }
 
 .account .button.button-positive.button-outline {
@@ -46,15 +59,15 @@ a:hover, a:focus {
     margin-right: 4px;
 }
 
-.button.button-positive.button-outline.activated,
-.button.button-positive.button-outline.checked {
+.button.button-outline.button-positive.activated,
+.button.button-outline.button-checked {
     background-color: #33cd5f;
     border: none;
     color: #ffffff;
 }
 
-.button.button-positive.button-outline.activated .ion-plus:before,
-.button.button-positive.button-outline.checked .ion-plus:before {
+.button.button-outline.button-positive.activated .ion-plus:before,
+.button.button-outline.button-checked .ion-plus:before {
     content: "\f122";
 }
 
@@ -124,8 +137,4 @@ a:hover, a:focus {
 form .icon {
     font-size: 18px;
     margin-right: 8px;
-}
-
-.search .item-input-wrapper {
-    background: transparent;
-}
+} 

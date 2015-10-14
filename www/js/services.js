@@ -43,7 +43,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
             $http.post(URL.base + URL.authenticate, data)
                 .success(function (res) {
                     storeUserCredentials(res.token, res.user);
-                    resolve(res.user.username);
+                    resolve(res);
                 })
                 .error(function (err) {
                     reject(err);
@@ -112,6 +112,21 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         }); 
     }
 
+    var searchUser = function (text) {
+        data = {textSearch: text};
+        return $q(function (resolve, reject) {
+
+            $http.post(URL.base + URL.searchUser, data)
+                .success(function (res) {
+                    resolve(res);
+                    console.log(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });
+    }
+
     var loadFollowers = function(user_id) {
         return $q(function (resolve, reject) {
             if (user_id === AuthService.user.userid) reqURL = URL.base + URL.getFollowers;
@@ -169,21 +184,23 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
     }
 
     var toggleFollow = function(getUser) {
+
         if (getUser.tickFollow === false) {
             follow(getUser.userid).then(function() {
+
                 getUser.tickFollow = true;
-                console.log(getUser.followers);
                 getUser.followers.push(AuthService.user.userid);
-                                console.log(getUser.followers);
                 AuthService.user.followings.push(getUser.userid);
+
                 AuthService.user.countFollowings++;
             });
         } else {
             unfollow(getUser.userid).then(function() {
+
                 getUser.tickFollow = false;
-                                console.log(getUser.followers);
                 getUser.followers.splice(getUser.followers.indexOf(AuthService.user.userid), 1);
                 AuthService.user.followings.splice(AuthService.user.followings.indexOf(getUser.userid), 1);
+
                 AuthService.user.countFollowings--;
             });
         }
@@ -191,6 +208,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
 
     return {
         loadUser: loadUser,
+        searchUser: searchUser,
         loadFollowers: loadFollowers,
         loadFollowings: loadFollowings,
         follow: follow,

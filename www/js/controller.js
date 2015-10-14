@@ -16,7 +16,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         AuthService.user = res.user;
         $scope.currentUser = AuthService.user;
         $state.go('app.home', {}, {reload: true});
-        console.log($scope.currentUser);
     }, function (err) {
         $state.go('login', {}, {reload: true});
     });
@@ -47,10 +46,11 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.login = function() {
         AuthService.login($scope.user).then(function (res) {
+            AuthService.user = res.user;
             $state.go('app.home', {}, {reload: true});
             var alertPopup = $ionicPopup.alert({
                 title: 'Register successfully!',
-                template: 'Hello, ' + res + "!"
+                template: 'Hello, ' + res.user.username + "!"
             });
         }, function(err) {
             var alertPopup = $ionicPopup.alert({
@@ -64,7 +64,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 .controller('HomeCtrl', function($scope, $state, $ionicPopup, PostService, UserService, AuthService) {
     $scope.comment = {text: ""};
 
-    console.log("Homectrl");
     $scope.refresh = function() {
         PostService.newFeeds().then(function (res) {
             $scope.posts = res;
@@ -123,12 +122,57 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 })
 
-.controller('SearchCtrl', function($scope) {
+.controller('SearchCtrl', function($scope, $state, $ionicPopup, PostService, UserService, AuthService) {
+    $scope.searchText = "";
+    $scope.results = [];
+    $scope.message = "";
 
+    $scope.search = function() {
+        var key = $scope.searchText.trim();
+
+        if (key === "") {
+            $scope.searchText = "";
+            return false;
+        }
+
+        UserService.searchUser(key).then(function (res) {
+            if (res.status === 205) {
+                $scope.message = res.message;
+                console.log(res.status);
+                return false;
+            } 
+
+            $scope.results = res;
+
+            for (var i = 0; i < $scope.results.length; i++) {
+                (function(j) {
+                    $scope.results[j].tickFollow = false;
+
+                    for (var a = 0; a < $scope.currentUser.followings.length; a++) {
+                        (function(b) {
+
+                            if ($scope.currentUser.followings[b] === $scope.results[j].userid) {
+                                $scope.follows[j].tickFollow = true;                                
+                            }
+                        }(a));             
+                    }
+                }(i));                
+            }
+        }), function (err) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Can not search!',
+                template: err.message
+            });
+        };
+    }
+
+    $scope.toggleFollow = function(getUser) {
+        UserService.toggleFollow(getUser);
+    }
 
 })
 
-.controller('CameraCtrl', function($state, $scope, $ionicPlatform, $ionicPopup, $cordovaCamera, $cordovaImagePicker, PostService) {
+.controller('CameraCtrl', function($scope, $state, $ionicPlatform, $ionicPopup, $cordovaCamera, $cordovaImagePicker, PostService) {
     $scope.image = "";
     $scope.data = {};
 
@@ -193,7 +237,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 })
 
-.controller('AccountCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService) {
+.controller('AccountCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService, AuthService) {
     $scope.comment = {text: ""};
 
     $scope.account = function() {
@@ -257,9 +301,16 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         PostService.toggleLike(getPost);
     }
 
+    $scope.logout = function() {
+        AuthService.logout();
+        $state.go('login', {}, {reload: true});
+    }
+
     $scope.refresh = function() {
         $scope.account();
-        $scope.getPost();  
+        $scope.getPost();
+
+        $scope.prefix = 'account-';
     }
 })
 
@@ -336,7 +387,19 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.refresh = function() {
         $scope.account();
-        $scope.getPost();  
+        $scope.getPost();
+
+        if ($state.current.name === 'app.home-user') {
+            $scope.prefix = 'home-user-';
+        }
+
+        if ($state.current.name === 'app.account-user') {
+            $scope.prefix = 'account-user-';
+        }
+
+        if ($state.current.name === 'app.search-user') {
+            $scope.prefix = 'search-user-';
+        }
     }
 })
 
@@ -380,8 +443,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
                     for (var a = 0; a < $scope.currentUser.followings.length; a++) {
                         (function(b) {
-                            console.log($scope.currentUser);
-
                             if ($scope.currentUser.followings[b] === $scope.follows[j].userid) {
                                 $scope.follows[j].tickFollow = true;                                
                             }
@@ -389,6 +450,8 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                     }
                 }(i));                
             }
+
+            console.log($scope.follows);
 
         }, function (err) {
             var alertPopup = $ionicPopup.alert({
@@ -415,6 +478,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
             UserService.loadUser($stateParams.userid).then(function (res) {
                 $scope.user = res;
                 $scope.checkState();
+
             }, function (err) {
                 var alertPopup = $ionicPopup.alert({
                     title: 'Can not load user!',
@@ -433,5 +497,20 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.refresh = function() {
         $scope.setup();
+
+        if ($state.current.name === 'app.home-user-followers'
+        ||  $state.current.name === 'app.home-user-followings'){
+            $scope.prefix = 'home-';
+        }
+
+        if ($state.current.name === 'app.account-user-followers'
+        ||  $state.current.name === 'app.account-user-followings'){
+            $scope.prefix = 'account-';
+        }
+
+        if ($state.current.name === 'app.search-user-followers'
+        ||  $state.current.name === 'app.search-user-followings'){
+            $scope.prefix = 'search-';
+        }
     }
 });
