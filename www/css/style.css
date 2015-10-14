@@ -138,3 +138,7 @@ form .icon {
     font-size: 18px;
     margin-right: 8px;
 } 
+
+.tab-item .icon {
+    margin-top: 6px;
+}

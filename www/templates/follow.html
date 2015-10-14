@@ -11,9 +11,9 @@
         <div class="list card" ng-repeat="follow in follows">
             <div class="item item-avatar">
 
-                <a ng-if="user.userid !== currentUser.userid" ng-href="#/app/{{prefix}}user"><img ng-src="{{follow.avatar}}"></a>
-                <a ng-if="user.userid === currentUser.userid" ng-href="#/app/account"><img ng-src="{{follow.avatar}}"></a>
-
+                <a ng-if="follow.userid !== currentUser.userid" ng-href="#/app/{{prefix}}user/{{follow.userid}}"><img ng-src="{{follow.avatar}}"></a>
+                <a ng-if="follow.userid === currentUser.userid" href="#/app/account"><img ng-src="{{follow.avatar}}"></a>
+                <h3>acd{{prefix}}</h3>
                 <h2>{{follow.username}}</h2>
                 <a ng-if="follow.userid !== currentUser.userid" ng-class="{
                     'button button-outline button-positive': !follow.tickFollow,

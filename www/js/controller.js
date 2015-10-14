@@ -1,16 +1,6 @@
 angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 .controller('AppCtrl', function($scope, $state, $ionicPopup, AuthService) {
-    // console.log(AuthService.isAuthenticated);
-    // console.log('currentUser: ' + AuthService.user);
-    // if (AuthService.isAuthenticated) {
-    //     $scope.user = AuthService.user;
-    //     $state.go('app.home', {}, {reload: true});
-    //         console.log("check Auth");
-    // } else {
-    //     $state.go('login', {}, {reload: true});
-    //         console.log("check Auth2");
-    // }
 
     AuthService.checkAuth().then(function (res) {
         AuthService.user = res.user;
@@ -48,6 +38,8 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     $scope.login = function() {
         AuthService.login($scope.user).then(function (res) {
             AuthService.user = res.user;
+            $scope.currentUser = AuthService.user;
+
             $state.go('app.home', {}, {reload: true});
             var alertPopup = $ionicPopup.alert({
                 title: 'Register successfully!',
@@ -233,8 +225,52 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     };
 })
 
-.controller('ActivityCtrl', function($scope) {
+.controller('EditCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService, AuthService) {
+    $scope.user = AuthService.user;
+    console.log(AuthService.user);
+    $scope.user.oldPassword = "";
+    $scope.user.newPassword = "";
+    $scope.user.repeatPassword = "";
 
+    $scope.save = function() {
+        var editUser = {};
+
+        if ($scope.user.username !== "") {
+            editUser.username = $scope.user.username;
+        }
+
+        if ($scope.user.newPassword !== "") {
+            if ($scope.user.newPassword === $scope.user.repeatPassword) {
+                editUser.newPassword = $scope.user.newPassword;
+            } else {
+                $ionicPopup.alert({
+                    title: 'Change password failure!',
+                    template: 'Repeat Password again!'
+                });
+                return false;
+            }
+        }
+
+        console.log(editUser);
+
+        UserService.editUser(editUser).then(function (res) {
+            $scope.user = res.user;
+            console.log(res.user);
+            $scope.user.oldPassword = "";
+            $scope.user.newPassword = "";
+            $scope.user.repeatPassword = "";
+
+            $ionicPopup.alert({
+                title: 'Edit Profile successfully!',
+                template: res.message
+            });
+        }, function (err) {
+            $ionicPopup.alert({
+                title: 'Edit Profile failure!',
+                template: res.message
+            });
+        });
+    }
 
 })
 
@@ -304,6 +340,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.logout = function() {
         AuthService.logout();
+        $scope.currentUser = undefined;
         $state.go('login', {}, {reload: true});
     }
 
@@ -517,7 +554,9 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         }
 
         if ($state.current.name === 'app.account-user-followers'
-        ||  $state.current.name === 'app.account-user-followings'){
+        ||  $state.current.name === 'app.account-user-followings'
+        ||  $state.current.name === 'app.account-followers'
+        ||  $state.current.name === 'app.account-followings'){
             $scope.prefix = 'account-';
         }
 

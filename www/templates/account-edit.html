@@ -4,33 +4,22 @@
         <div class="bar bar-header bar-positive">
 
             <div class="buttons">
-                <a class="button icon ion-arrow-left-c button-clear button-white" ng-click="$ionicGoBack()"></a>
+                <a class="button icon ion-arrow-left-c button-clear button-white" href="#/app/account"></a>
             </div>
 
             <h1 class="title">Edit</h1>
 
-            <button type="submit" class="button button-clear button-white">Save</button>
+            <button class="button button-clear button-white" ng-click="save()">Save</button>
 
         </div>
 
         <ion-content has-header="true" class="main-content">
 
             <div class="list">
-                <label class="item item-input">
-                    <i class="icon ion-card placeholder-icon"></i>
-                    <input type="text" value="true name">
-                </label>
+                <div class="item item-divider">General Information</div>
                 <label class="item item-input">
                     <i class="icon ion-person placeholder-icon"></i>
-                    <input type="text" value="user name">
-                </label>
-                <label class="item item-input">
-                    <i class="icon ion-compass placeholder-icon"></i>
-                    <input type="text" placeholder="Website">
-                </label>
-                <label class="item item-input">
-                    <i class="icon ion-quote placeholder-icon"></i>
-                    <input type="text" placeholder="Bio">
+                    <input type="text" ng-model="user.username">
                 </label>
             </div>
             
@@ -38,19 +27,23 @@
                 <div class="item item-divider">Private Information</div>
                 <label class="item item-input">
                     <i class="icon ion-ios-email placeholder-icon"></i>
-                    <input type="text" value="email@domain.com">
+                    {{user.email}}
+                </label>
+            </div>
+
+            <div class="list">
+                <div class="item item-divider">Change Password</div>
+                <label class="item item-input">
+                    <i class="icon ion-android-unlock placeholder-icon"></i>
+                    <input type="password" ng-model="user.oldPassword" placeholder="Enter current Password">
                 </label>
                 <label class="item item-input">
-                    <i class="icon ion-android-phone-portrait placeholder-icon"></i>
-                    <input type="text" value="phone number">
+                    <i class="icon ion-android-lock placeholder-icon"></i>
+                    <input type="password" ng-model="user.newPassword" placeholder="Enter new Password">
                 </label>
                 <label class="item item-input">
-                    <i class="icon ion-transgender placeholder-icon"></i>
-                    <select>
-                        <option value="0" selected>Not Specified</option>
-                        <option value="1">Male</option>
-                        <option value="2">Female</option>
-                    </select>
+                    <i class="icon ion-android-lock placeholder-icon"></i>
+                    <input type="password" ng-model="user.repeatPassword" placeholder="Repeat new Password">
                 </label>
             </div>
         <ion-content>

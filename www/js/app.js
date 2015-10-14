@@ -111,7 +111,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             url: '/search-user/:userid',
             cache: false,
             views: {
-                'app-home': {
+                'app-search': {
                 templateUrl: 'templates/account.html',
                 controller: 'UsersCtrl'
                 }
@@ -122,7 +122,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             url: '/search-user-followers/:userid',
             cache: false,
             views: {
-                'app-home': {
+                'app-search': {
                 templateUrl: 'templates/follow.html',
                 controller: 'FollowCtrl'
                 }
@@ -136,7 +136,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             url: '/search-user-followings/:userid',
             cache: false,
             views: {
-                'app-home': {
+                'app-search': {
                 templateUrl: 'templates/follow.html',
                 controller: 'FollowCtrl'
                 }
@@ -157,38 +157,38 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             }
         })
 
-        .state('app.activity', {
-            url: '/activity',
-            cache: false,
-            views: {
-                'app-activity': {
-                templateUrl: 'templates/activity.html',
-                controller: 'ActivityCtrl'
-                }
-            }
-        })
+        // .state('app.activity', {
+        //     url: '/activity',
+        //     cache: false,
+        //     views: {
+        //         'app-activity': {
+        //         templateUrl: 'templates/activity.html',
+        //         controller: 'ActivityCtrl'
+        //         }
+        //     }
+        // })
 
-        .state('app.activity.following', {
-            url: '/following',
-            cache: false,
-            views: {
-                'activity-following': {
-                templateUrl: 'templates/activity-following.html',
-                controller: 'ActivityCtrl'
-                }
-            },
-        })
+        // .state('app.activity.following', {
+        //     url: '/following',
+        //     cache: false,
+        //     views: {
+        //         'activity-following': {
+        //         templateUrl: 'templates/activity-following.html',
+        //         controller: 'ActivityCtrl'
+        //         }
+        //     },
+        // })
 
-        .state('app.activity.you', {
-            url: '/you',
-            cache: false,
-            views: {
-                'activity-you': {
-                templateUrl: 'templates/activity-you.html',
-                controller: 'ActivityCtrl'
-                }
-            }
-        })
+        // .state('app.activity.you', {
+        //     url: '/you',
+        //     cache: false,
+        //     views: {
+        //         'activity-you': {
+        //         templateUrl: 'templates/activity-you.html',
+        //         controller: 'ActivityCtrl'
+        //         }
+        //     }
+        // })
 
         .state('app.account', {
             url: '/account',
@@ -274,18 +274,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             views: {
                 'app-account': {
                 templateUrl: 'templates/account-edit.html',
-                controller: 'AccountCtrl'
-                }
-            }
-        })
-
-        .state('app.option', {
-            url: '/option',
-            cache: false,
-            views: {
-                'app-account': {
-                templateUrl: 'templates/account-option.html',
-                controller: 'AccountCtrl'
+                controller: 'EditCtrl'
                 }
             }
         })

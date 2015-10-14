@@ -99,8 +99,8 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
     var loadUser = function(user_id) {
         return $q(function (resolve, reject) {
 
-            if (!user_id) reqURL = URL.base + URL.getProfile;
-            else reqURL = URL.base + URL.getProfile + '/' + user_id;
+            if (!user_id) reqURL = URL.base + URL.user;
+            else reqURL = URL.base + URL.user + '/' + user_id;
 
             $http.get(reqURL)
                 .success(function (res) {
@@ -117,6 +117,20 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         return $q(function (resolve, reject) {
 
             $http.post(URL.base + URL.searchUser, data)
+                .success(function (res) {
+                    resolve(res);
+                    console.log(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });
+    }
+
+    var editUser = function (data) {
+        return $q(function (resolve, reject) {
+
+            $http.put(URL.base + URL.user, data)
                 .success(function (res) {
                     resolve(res);
                     console.log(res);
@@ -209,6 +223,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
     return {
         loadUser: loadUser,
         searchUser: searchUser,
+        editUser: editUser,
         loadFollowers: loadFollowers,
         loadFollowings: loadFollowings,
         follow: follow,
