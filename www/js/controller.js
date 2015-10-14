@@ -16,6 +16,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         AuthService.user = res.user;
         $scope.currentUser = AuthService.user;
         $state.go('app.home', {}, {reload: true});
+        console.log($scope.currentUser);
     }, function (err) {
         $state.go('login', {}, {reload: true});
     });
@@ -113,13 +114,13 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.postComment = function(getPost) {
         PostService.postComment(getPost, $scope.comment.text);
+        $scope.comment.text = null;
     }
 
     $scope.toggleLike = function(getPost) {
         PostService.toggleLike(getPost);
     }
 
-    $scope.refresh();
 })
 
 .controller('SearchCtrl', function($scope) {
@@ -225,7 +226,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                                     template: err.message
                                 });
                             });
-                            console.log($scope.posts[j].tickLike);
+
                         }(a));             
                     }
 
@@ -249,10 +250,10 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.postComment = function(getPost) {
         PostService.postComment(getPost, $scope.comment.text);
+        $scope.comment.text = null;
     }
 
     $scope.toggleLike = function(getPost) {
-        console.log(getPost);
         PostService.toggleLike(getPost);
     }
 
@@ -265,7 +266,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 .controller('UsersCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService) {
     $scope.comment = {text: ""};
 
-    console.log('go Users');
     $scope.account = function() {
         UserService.loadUser($stateParams.userid).then(function (res) {
             $scope.user = res;
@@ -284,7 +284,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
             for (var i = 0; i < $scope.posts.length; i++) {
                 (function(j) {
                     $scope.posts[j].tickLike = false;
-                    
+
                     for (var a = 0; a < $scope.posts[j].likes.length; a++) {
                         (function(b) {
                             $scope.posts[j].tickLike = false;
@@ -327,6 +327,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.postComment = function(getPost) {
         PostService.postComment(getPost, $scope.comment.text);
+        $scope.comment.text = null;
     }
 
     $scope.toggleLike = function(getPost) {
@@ -336,5 +337,101 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     $scope.refresh = function() {
         $scope.account();
         $scope.getPost();  
+    }
+})
+
+.controller('FollowCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService) {
+    $scope.user = {};
+
+    $scope.loadFollowers = function() {
+        UserService.loadFollowers($scope.user.userid).then(function (res) {
+            $scope.follows = res;
+
+            for (var i = 0; i < $scope.follows.length; i++) {
+                (function(j) {
+                    $scope.follows[j].tickFollow = false;
+
+                    for (var a = 0; a < $scope.currentUser.followings.length; a++) {
+                        (function(b) {
+
+                            if ($scope.currentUser.followings[b] === $scope.follows[j].userid) {
+                                $scope.follows[j].tickFollow = true;                                
+                            }
+                        }(a));             
+                    }
+                }(i));                
+            }
+        }, function (err) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Can not load Followers!',
+                template: err.message
+            });
+        });
+    }
+
+    $scope.loadFollowings = function() {
+
+        UserService.loadFollowings($scope.user.userid).then(function (res) {
+            $scope.follows = res;
+
+            for (var i = 0; i < $scope.follows.length; i++) {
+                (function(j) {
+                    $scope.follows[j].tickFollow = false;
+
+                    for (var a = 0; a < $scope.currentUser.followings.length; a++) {
+                        (function(b) {
+                            console.log($scope.currentUser);
+
+                            if ($scope.currentUser.followings[b] === $scope.follows[j].userid) {
+                                $scope.follows[j].tickFollow = true;                                
+                            }
+                        }(a));             
+                    }
+                }(i));                
+            }
+
+        }, function (err) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Can not load Followings!',
+                template: err.message
+            });
+        });
+    }
+    
+    $scope.checkState = function() {
+        if ($state.current.data.header === "followers") {
+            $scope.title = "Followers";
+            $scope.loadFollowers();
+        }
+
+        if ($state.current.data.header === "followings") {
+            $scope.title = "Followings";
+            $scope.loadFollowings();
+        }
+    }
+
+    $scope.setup = function() {
+        if (!!$stateParams.userid) {
+            UserService.loadUser($stateParams.userid).then(function (res) {
+                $scope.user = res;
+                $scope.checkState();
+            }, function (err) {
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Can not load user!',
+                    template: err.message
+                });
+            });
+        } else {
+            $scope.user = $scope.currentUser;
+            $scope.checkState();
+        }
+    }
+
+    $scope.toggleFollow = function(getUser) {
+        UserService.toggleFollow(getUser);
+    }   
+
+    $scope.refresh = function() {
+        $scope.setup();
     }
 });

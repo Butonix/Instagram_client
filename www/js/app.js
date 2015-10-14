@@ -68,27 +68,33 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             }
         })
 
-        // .state('app.home-user.grid', {
-        //     url: '/grid',
-        //     cache: false,
-        //     views: {
-        //         'users-grid': {
-        //         templateUrl: 'templates/account-grid.html',
-        //         controller: 'UsersCtrl'
-        //         }
-        //     }
-        // })
+        .state('app.home-user-followers', {
+            url: '/home-user-followers/:userid',
+            cache: false,
+            views: {
+                'app-home': {
+                templateUrl: 'templates/follow.html',
+                controller: 'FollowCtrl'
+                }
+            },
+            data: {
+                header: 'followers'
+            }
+        })
 
-        // .state('app.home-user.post', {
-        //     url: '/post',
-        //     cache: false,
-        //     views: {
-        //         'users-post': {
-        //         templateUrl: 'templates/account-post.html',
-        //         controller: 'UsersCtrl'
-        //         }
-        //     }
-        // })
+        .state('app.home-user-followings', {
+            url: '/home-user-followings/:userid',
+            cache: false,
+            views: {
+                'app-home': {
+                templateUrl: 'templates/follow.html',
+                controller: 'FollowCtrl'
+                }
+            },
+            data: {
+                header: 'followings'
+            }
+        })
 
         .state('app.search', {
             url: '/search',
@@ -164,7 +170,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
                 templateUrl: 'templates/activity-following.html',
                 controller: 'ActivityCtrl'
                 }
-            }
+            },
         })
 
         .state('app.activity.you', {
@@ -189,25 +195,33 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             }
         })
 
-        // .state('app.account.grid', {
-        //     url: '/grid',
-        //     views: {
-        //         'grid-img': {
-        //         templateUrl: 'templates/account-grid.html',
-        //         controller: 'AccountCtrl'
-        //         }
-        //     }
-        // })
+        .state('app.account-followers', {
+            url: '/followers',
+            cache: false,
+            views: {
+                'app-account': {
+                templateUrl: 'templates/follow.html',
+                controller: 'FollowCtrl'
+                }
+            },
+            data: {
+                header: 'followers'
+            }
+        })
 
-        // .state('app.account.post', {
-        //     url: '/post',
-        //     views: {
-        //         'post-img': {
-        //         templateUrl: 'templates/account-post.html',
-        //         controller: 'AccountCtrl'
-        //         }
-        //     }
-        // })
+        .state('app.account-followings', {
+            url: '/followings',
+            cache: false,
+            views: {
+                'app-account': {
+                templateUrl: 'templates/follow.html',
+                controller: 'FollowCtrl'
+                }
+            },
+            data: {
+                header: 'followings'
+            }
+        })
 
         .state('app.edit', {
             url: '/edit',

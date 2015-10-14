@@ -24,7 +24,7 @@ a:hover, a:focus {
     border-radius: 1px;
 }
 
-.search .button.button-positive.button-outline {
+.follow .button.button-positive.button-outline {
     position: absolute;
     top: 22px;
     right: 8px;
@@ -34,18 +34,27 @@ a:hover, a:focus {
     padding-top: 5px;
 }
 
-.search .button.button-positive.button-outline .ion-plus {
+.account .button.button-positive.button-outline {
+    font-size: 20px;
+    min-height: 32px;
+    line-height: 30px;
+    padding-top: 5px;
+}
+
+.button.button-positive.button-outline .ion-plus {
     font-size: 14px;
     margin-right: 4px;
 }
 
-.search .button.button-positive.button-outline.activated {
+.button.button-positive.button-outline.activated,
+.button.button-positive.button-outline.checked {
     background-color: #33cd5f;
     border: none;
     color: #ffffff;
 }
 
-.search .button.button-positive.button-outline.activated .ion-plus:before {
+.button.button-positive.button-outline.activated .ion-plus:before,
+.button.button-positive.button-outline.checked .ion-plus:before {
     content: "\f122";
 }
 

@@ -1,9 +1,9 @@
 <ion-view class="account" ng-init="refresh()">
-    <!-- <ion-nav-bar class="nav-title-slide-ios7 bar-positive">
-        <ion-nav-back-button class="button-icon ion-arrow-left-c">
-        </ion-nav-back-button>
-    </ion-nav-bar> -->
+
     <div class="bar bar-header bar-positive">
+        <div class="buttons" ng-if="user.userid !== currentUser.userid">
+            <a class="button icon ion-arrow-left-c button-clear button-white" ng-click="$ionicGoBack()"></a>
+        </div>
         <h1 class="title">{{ user.username }}</h1>
         <div class="buttons" ng-if="user.userid === currentUser.userid">
             <a href="#/app/option" class="button icon ion-ios-gear button-clear button-white"></a>
@@ -15,12 +15,21 @@
         <div class="list user-info">
             <div class="item item-avatar">
                 <img src="{{ user.avatar }}">
-                <div class="row">
-                    <div class="col col-33"><a href="#"><h2>{{ user.countPosts }}</h2><p>posts</p></a></div>
-                    <div class="col col-33"><a href="#"><h2>{{ user.countFollowers }}</h2><p>followers</p></a></div>
-                    <div class="col col-33"><a href="#"><h2>{{ user.countFollowings }}</h2><p>following</p></a></div>
+
+                <div class="row" ng-if="user.userid === currentUser.userid">
+                    <div class="col col-33"><a><h2>{{ user.countPosts }}</h2><p>posts</p></a></div>
+                    <div class="col col-33"><a href="#/app/followers"><h2>{{ user.countFollowers }}</h2><p>followers</p></a></div>
+                    <div class="col col-33"><a href="#/app/followings"><h2>{{ user.countFollowings }}</h2><p>following</p></a></div>
                 </div>
-                <a href="#/app/edit"><button class="button button-block button-stable">Edit your profile</button></a>
+
+                <div class="row" ng-if="user.userid !== currentUser.userid">
+                    <div class="col col-33"><a><h2>{{ user.countPosts }}</h2><p>posts</p></a></div>
+                    <div class="col col-33"><a href="#/app/home-user-followers/{{user.userid}}"><h2>{{ user.countFollowers }}</h2><p>followers</p></a></div>
+                    <div class="col col-33"><a href="#/app/home-user-followings/{{user.userid}}"><h2>{{ user.countFollowings }}</h2><p>following</p></a></div>
+                </div>
+
+                <a href="#/app/edit" ng-if="user.userid === currentUser.userid"><button class="button button-block button-stable">Edit your profile</button></a>
+                <a class="button button-outline button-positive" ng-if="user.userid !== currentUser.userid"><i class="ion-plus"></i><i class="ion-person"></i></a>
             </div>
         </div>
 
@@ -48,7 +57,7 @@
             </div>
 
             <div class="item item-body">
-                <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"><a href="#/app/home-user/{{ like.userid }}"> {{ like.username }} </a>,</b></p>
+                <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"><a href="#/app/home-user/{{ like.userid }}"> {{ like.username }} </a></b></p>
 
                 <p class="img-caption">{{ post.caption }}</p>
                 <p class="img-comments" ng-repeat="comment in post.comments">

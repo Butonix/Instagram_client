@@ -95,7 +95,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
     };
 })
 
-.factory('UserService', function($q, $http, URL) {
+.factory('UserService', function($q, $http, URL, AuthService) {
     var loadUser = function(user_id) {
         return $q(function (resolve, reject) {
 
@@ -112,8 +112,90 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         }); 
     }
 
+    var loadFollowers = function(user_id) {
+        return $q(function (resolve, reject) {
+            if (user_id === AuthService.user.userid) reqURL = URL.base + URL.getFollowers;
+            else reqURL = URL.base + URL.getFollowers + '/user/' + user_id;
+
+            $http.get(reqURL)
+                .success(function (res) {
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });
+    }
+
+    var loadFollowings = function(user_id) {
+        return $q(function (resolve, reject) {
+            if (user_id === AuthService.user.userid) reqURL = URL.base + URL.getFollowings;
+            else reqURL = URL.base + URL.getFollowings + '/user/' + user_id;
+
+            $http.get(reqURL)
+                .success(function (res) {
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });
+    }
+
+    var follow = function(getUser) {
+        return $q(function (resolve, reject) {
+
+            $http.post(URL.base + URL.follow + '/' + getUser)
+                .success(function (res) {
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });  
+    }
+
+    var unfollow = function(getUser) {
+        return $q(function (resolve, reject) {
+
+            $http.put(URL.base + URL.follow + '/' + getUser)
+                .success(function (res) {
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        });  
+    }
+
+    var toggleFollow = function(getUser) {
+        if (getUser.tickFollow === false) {
+            follow(getUser.userid).then(function() {
+                getUser.tickFollow = true;
+                console.log(getUser.followers);
+                getUser.followers.push(AuthService.user.userid);
+                                console.log(getUser.followers);
+                AuthService.user.followings.push(getUser.userid);
+                AuthService.user.countFollowings++;
+            });
+        } else {
+            unfollow(getUser.userid).then(function() {
+                getUser.tickFollow = false;
+                                console.log(getUser.followers);
+                getUser.followers.splice(getUser.followers.indexOf(AuthService.user.userid), 1);
+                AuthService.user.followings.splice(AuthService.user.followings.indexOf(getUser.userid), 1);
+                AuthService.user.countFollowings--;
+            });
+        }
+    } 
+
     return {
-        loadUser: loadUser
+        loadUser: loadUser,
+        loadFollowers: loadFollowers,
+        loadFollowings: loadFollowings,
+        follow: follow,
+        unfollow: unfollow,
+        toggleFollow: toggleFollow
     };
 })
 
@@ -210,13 +292,11 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
     var toggleLike = function(getPost) {
         if (getPost.tickLike === false) {
             like(getPost.id).then(function() {
-                console.log("liked");
                 getPost.tickLike = true;
                 getPost.likes.push(AuthService.user);
             });
         } else {
             unlike(getPost.id).then(function() {
-                console.log("liked");
                 getPost.tickLike = false;
                 getPost.likes.splice(getPost.likes.indexOf(AuthService.user), 1);
             });
