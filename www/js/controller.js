@@ -70,25 +70,13 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
             for (var i = 0; i < $scope.posts.length; i++) {
                 (function(j) {
-                    UserService.loadUser($scope.posts[j].user_id).then(function (res) {              
-                        $scope.posts[j].user = res;
-                        if ($scope.posts[j].user.userid == AuthService.user.userid) {
-                            console.log('right user');
-                        }       
-                    }, function (err) {
-                        var alertPopup = $ionicPopup.alert({
-                            title: 'Can not load author\'post!',
-                            template: err.message
-                        });
-                    });
+                    $scope.posts[j].tickLike = false;
 
                     for (var a = 0; a < $scope.posts[j].likes.length; a++) {
                         (function(b) {
-                            $scope.posts[j].tickLike = false;
 
                             if ($scope.posts[j].likes[b] === $scope.currentUser.userid) {
-                                $scope.posts[j].tickLike = true;
-                                
+                                $scope.posts[j].tickLike = true;                                
                             }
 
                             UserService.loadUser($scope.posts[j].likes[b]).then(function (res) {              
@@ -104,9 +92,8 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                         }(a));             
                     }
 
-                    PostService.loadComments($scope.posts[j]._id).then(function (res) {              
+                    PostService.loadComments($scope.posts[j].id).then(function (res) {
                         $scope.posts[j].comments = res;
-                        console.log($scope.posts[j].comments);
                     }, function (err) {
                         var alertPopup = $ionicPopup.alert({
                             title: 'Can not load comment!',
@@ -140,8 +127,64 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 })
 
-.controller('CameraCtrl', function($scope) {
+.controller('CameraCtrl', function($state, $scope, $ionicPlatform, $ionicPopup, $cordovaCamera, $cordovaImagePicker, PostService) {
+    $scope.image = "";
+    $scope.data = {};
 
+    $scope.isPick = function() {
+        return $scope.image !== "";
+    };
+
+    $scope.picker = function() {
+        var options = {
+            maximumImagesCount: 1,
+            width: 800,
+            height: 0,
+            quality: 100
+        };
+
+        $cordovaImagePicker.getPictures(options)
+            .then(function(results) {
+                $scope.image = results[0];
+            }, function(err) {
+                $ionicPopup.alert({
+                    title: 'Image picking failure',
+                    template: 'Failed on picking an image to post.'
+                });
+            });
+    };
+
+    $scope.camera = function() {
+        var options = {
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.CAMERA
+        };
+
+        $cordovaCamera.getPicture(options).then(function (imageURI) {
+            $scope.image = imageURI;
+        }, function (err) {
+            $ionicPopup.alert({
+                title: 'Capture failure',
+                template: 'Failed on capture an image to post.'
+            });
+        });
+    };
+
+    $scope.post = function() {
+        $rootScope.show('Please wait...');
+
+        PostService.postPost($scope.img, $scope.data)
+            .then(function (res) {
+                $rootScope.hide();
+                $state.go('tab.home', {}, {reload: true});
+            }, function (err) {
+                $rootScope.hide();
+                $ionicPopup.alert({
+                    title: 'Post failure',
+                    template: 'There were some problems with posting'
+                });
+            });
+    };
 })
 
 .controller('ActivityCtrl', function($scope) {
@@ -149,19 +192,53 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 })
 
-.controller('AccountCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, AuthService, UserService) {
-    console.log('go Account');
+.controller('AccountCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService) {
+    $scope.comment = {text: ""};
 
     $scope.account = function() {
-        $scope.user = AuthService.user;
-        console.log($scope.user);
+        $scope.user = $scope.currentUser;
     }
 
     $scope.getPost = function() {
-                                    console.log('getpost');
         PostService.loadPosts().then(function (res) {
             $scope.posts = res;
-            console.log($scope.posts);
+
+            for (var i = 0; i < $scope.posts.length; i++) {
+                (function(j) {
+                    $scope.posts[j].tickLike = false;
+
+                    for (var a = 0; a < $scope.posts[j].likes.length; a++) {
+                        (function(b) {
+                            $scope.posts[j]._id = $scope.posts[j].id;
+
+                            if ($scope.posts[j].likes[b] === $scope.currentUser.userid) {
+                                $scope.posts[j].tickLike = true;                                
+                            }
+
+                            UserService.loadUser($scope.posts[j].likes[b]).then(function (res) {              
+                                $scope.posts[j].likes[b] = {};
+                                $scope.posts[j].likes[b].username = res.username;
+                                $scope.posts[j].likes[b].userid = res._id;
+                            }, function (err) {
+                                var alertPopup = $ionicPopup.alert({
+                                    title: 'Can not load liker!',
+                                    template: err.message
+                                });
+                            });
+                            console.log($scope.posts[j].tickLike);
+                        }(a));             
+                    }
+
+                    PostService.loadComments($scope.posts[j].id).then(function (res) {           
+                        $scope.posts[j].comments = res;
+                    }, function (err) {
+                        var alertPopup = $ionicPopup.alert({
+                            title: 'Can not load comment!',
+                            template: err.message
+                        });
+                    });
+                }(i));                
+            }
         }, function (err) {
             var alertPopup = $ionicPopup.alert({
                 title: 'Can not load posts!',
@@ -170,13 +247,24 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         });
     }
 
+    $scope.postComment = function(getPost) {
+        PostService.postComment(getPost, $scope.comment.text);
+    }
+
+    $scope.toggleLike = function(getPost) {
+        console.log(getPost);
+        PostService.toggleLike(getPost);
+    }
+
     $scope.refresh = function() {
         $scope.account();
         $scope.getPost();  
     }
 })
 
-.controller('UsersCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, AuthService, UserService) {
+.controller('UsersCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService) {
+    $scope.comment = {text: ""};
+
     console.log('go Users');
     $scope.account = function() {
         UserService.loadUser($stateParams.userid).then(function (res) {
@@ -192,13 +280,57 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     $scope.getPost = function() {
         PostService.loadPosts($stateParams.userid).then(function (res) {
             $scope.posts = res;
-            console.log($scope.posts);
+
+            for (var i = 0; i < $scope.posts.length; i++) {
+                (function(j) {
+                    $scope.posts[j].tickLike = false;
+                    
+                    for (var a = 0; a < $scope.posts[j].likes.length; a++) {
+                        (function(b) {
+                            $scope.posts[j].tickLike = false;
+                            $scope.posts[j]._id = $scope.posts[j].id;
+
+                            if ($scope.posts[j].likes[b] === $scope.currentUser.userid) {
+                                $scope.posts[j].tickLike = true;                                
+                            }
+
+                            UserService.loadUser($scope.posts[j].likes[b]).then(function (res) {              
+                                $scope.posts[j].likes[b] = {};
+                                $scope.posts[j].likes[b].username = res.username;
+                                $scope.posts[j].likes[b].userid = res._id;
+                            }, function (err) {
+                                var alertPopup = $ionicPopup.alert({
+                                    title: 'Can not load liker!',
+                                    template: err.message
+                                });
+                            });
+                        }(a));             
+                    }
+
+                    PostService.loadComments($scope.posts[j].id).then(function (res) {            
+                        $scope.posts[j].comments = res;
+                    }, function (err) {
+                        var alertPopup = $ionicPopup.alert({
+                            title: 'Can not load comment!',
+                            template: err.message
+                        });
+                    });
+                }(i));                
+            }
         }, function (err) {
             var alertPopup = $ionicPopup.alert({
                 title: 'Can not load posts!',
                 template: err.message
             });
         });
+    }
+
+    $scope.postComment = function(getPost) {
+        PostService.postComment(getPost, $scope.comment.text);
+    }
+
+    $scope.toggleLike = function(getPost) {
+        PostService.toggleLike(getPost);
     }
 
     $scope.refresh = function() {

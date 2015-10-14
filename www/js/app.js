@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 //angular.module('starter', ['ionic'])
-var app = angular.module('instagram', ['ionic', 'instagram.controller', 'instagram.services']);
+var app = angular.module('instagram', ['ionic', 'instagram.controller', 'instagram.services', 'ngCordova']);
 
 app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -68,27 +68,27 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             }
         })
 
-        .state('app.home-user.grid', {
-            url: '/grid',
-            cache: false,
-            views: {
-                'users-grid': {
-                templateUrl: 'templates/account-grid.html',
-                controller: 'UsersCtrl'
-                }
-            }
-        })
+        // .state('app.home-user.grid', {
+        //     url: '/grid',
+        //     cache: false,
+        //     views: {
+        //         'users-grid': {
+        //         templateUrl: 'templates/account-grid.html',
+        //         controller: 'UsersCtrl'
+        //         }
+        //     }
+        // })
 
-        .state('app.home-user.post', {
-            url: '/post',
-            cache: false,
-            views: {
-                'users-post': {
-                templateUrl: 'templates/account-post.html',
-                controller: 'UsersCtrl'
-                }
-            }
-        })
+        // .state('app.home-user.post', {
+        //     url: '/post',
+        //     cache: false,
+        //     views: {
+        //         'users-post': {
+        //         templateUrl: 'templates/account-post.html',
+        //         controller: 'UsersCtrl'
+        //         }
+        //     }
+        // })
 
         .state('app.search', {
             url: '/search',
@@ -139,7 +139,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             cache: false,
             views: {
                 'app-camera': {
-                templateUrl: 'templates/activity.html',
+                templateUrl: 'templates/camera.html',
                 controller: 'CameraCtrl'
                 }
             }
@@ -189,25 +189,25 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             }
         })
 
-        .state('app.account.grid', {
-            url: '/grid',
-            views: {
-                'grid-img': {
-                templateUrl: 'templates/account-grid.html',
-                controller: 'AccountCtrl'
-                }
-            }
-        })
+        // .state('app.account.grid', {
+        //     url: '/grid',
+        //     views: {
+        //         'grid-img': {
+        //         templateUrl: 'templates/account-grid.html',
+        //         controller: 'AccountCtrl'
+        //         }
+        //     }
+        // })
 
-        .state('app.account.post', {
-            url: '/post',
-            views: {
-                'post-img': {
-                templateUrl: 'templates/account-post.html',
-                controller: 'AccountCtrl'
-                }
-            }
-        })
+        // .state('app.account.post', {
+        //     url: '/post',
+        //     views: {
+        //         'post-img': {
+        //         templateUrl: 'templates/account-post.html',
+        //         controller: 'AccountCtrl'
+        //         }
+        //     }
+        // })
 
         .state('app.edit', {
             url: '/edit',
@@ -229,12 +229,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
                 controller: 'AccountCtrl'
                 }
             }
-        })
-
-        .state('camera', {
-            url: '/camera',
-            cache: false,
-            templateUrl: 'templates/camera.html',
         })
         ;
 

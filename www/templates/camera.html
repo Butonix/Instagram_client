@@ -1,1 +1,27 @@
-<h1>Camera page</h1>
+<ion-view view-title="Camera">
+	<div class="bar bar-header bar-positive">
+        <h1 class="title">Camera</h1>
+    </div>
+	<ion-content>
+	    <div class="list card pick-image">
+	        <div class="item">
+	            <img ng-src="{{image}}" id="myImage"/>
+	            <div class="button-bar">
+	              <button class="button" ng-click="camera()">From Camera</button>
+	              <button class="button" ng-click="picker()">From Gallery</button>
+	            </div>
+	        </div>
+
+	        <label class="item item-input item-floating-label">
+	            <span class="input-label">Caption</span>
+	            <textarea placeholder="Caption" ng-model="data.description"></textarea>
+	        </label>
+
+	        <div class="item">
+	            <button ng-click="post()" ng-disabled="!isPick()" class="button button-block button-positive">
+	                Post
+	            </button>
+	        </div>
+	    </div>
+	</ion-content>
+</ion-view>

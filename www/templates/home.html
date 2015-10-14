@@ -29,11 +29,11 @@
             </div>
 
             <div class="item item-body">
-                <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"><a href="#/app/home-user/{{ like.userid }}"> {{ like.username }}</a>,</b></p>
+                <p><i class="icon ion-ios-heart"></i><b ng-repeat="like in post.likes"><a href="#/app/home-user/{{ like.userid }}"> {{ like.username }} </a></b></p>
 
-                <p class="img-caption"><b>{{ post.user.username }}</b> {{ post.caption }}</p>
-                <p class="img-comments" ng-repeat="comment in post.comments">
-                    <b>{{ comment.username }}</b> {{ comment.text }}
+                <p class="img-caption">{{ post.caption }}</p>
+                <p class="img-comments" ng-repeat="each in post.comments">
+                    <b>{{ each.username }}</b> {{ each.text }}
                 </p>
 
                 <div class="item item-input-inset">

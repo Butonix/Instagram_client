@@ -44,7 +44,6 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
                 .success(function (res) {
                     storeUserCredentials(res.token, res.user);
                     resolve(res.user.username);
-                    console.log('currentUser2: ' + res.user.username);
                 })
                 .error(function (err) {
                     reject(err);
@@ -118,7 +117,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
     };
 })
 
-.factory('PostService', function($q, $http, URL) {
+.factory('PostService', function($q, $http, URL, AuthService) {
     var loadNewfeeds = function() {
         return $q(function (resolve, reject) {
 
@@ -149,7 +148,6 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         return $q(function (resolve, reject) {
             if (!user_id) reqURL = URL.base + URL.postRead;
             else reqURL = URL.base + URL.postUser + '/' + user_id;
-            console.log(reqURL);
 
             $http.get(reqURL)
                 .success(function (res) {
@@ -157,6 +155,28 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
                 })
                 .error(function (err) {
                     reject(err);
+                });
+        });
+    }
+
+    var postPost = function(image, data) {
+        var options = {
+                fileKey: 'image',
+                params: data,
+                headers: {
+                    "x-auth-token": $http.defaults.headers.common['x-auth-token']
+                }
+            };
+
+        return $q(function (resolve, reject) {
+
+            $cordovaFileTransfer.upload(encodeURI(URL.base + URL.postRead), image, options, true)
+                .then(function(res) {
+                    resolve(res);
+                }, function(err) {
+                    reject(err);
+                }, function(progress) {
+
                 });
         });
     }
@@ -189,28 +209,28 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
 
     var toggleLike = function(getPost) {
         if (getPost.tickLike === false) {
-            like(getPost._id).then(function() {
+            like(getPost.id).then(function() {
+                console.log("liked");
                 getPost.tickLike = true;
+                getPost.likes.push(AuthService.user);
             });
         } else {
-            unlike(getPost._id).then(function() {
+            unlike(getPost.id).then(function() {
+                console.log("liked");
                 getPost.tickLike = false;
+                getPost.likes.splice(getPost.likes.indexOf(AuthService.user), 1);
             });
         }
     }
 
     var postComment = function(getPost, getComment) {
         var data = {text: getComment};
-        console.log(getPost.comments);
+
         return $q(function (resolve, reject) {
 
-            $http.post(URL.base + URL.postComment + '/' + getPost._id, data)
+            $http.post(URL.base + URL.postComment + '/' + getPost.id, data)
                 .success(function (res) {
-                    console.log(res.comment);
-                    console.log(getPost.comments);
                     getPost.comments.push(res.comment);
-                    
-                    console.log(getPost.comments);
                     resolve(res.comment);
                 })
                 .error(function (err) {
@@ -223,6 +243,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         newFeeds: loadNewfeeds,
         loadComments: loadComments,
         loadPosts: loadPosts,
+        postPost: postPost,
         like: like,
         unlike: unlike,
         toggleLike: toggleLike,
