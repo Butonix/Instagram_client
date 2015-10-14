@@ -59,15 +59,15 @@ a:hover, a:focus {
     margin-right: 4px;
 }
 
-.button.button-outline.button-positive.activated,
-.button.button-outline.button-checked {
+.button.button-positive.button-outline.activated,
+.button.button-positive.button-outline.checked {
     background-color: #33cd5f;
     border: none;
     color: #ffffff;
 }
 
-.button.button-outline.button-positive.activated .ion-plus:before,
-.button.button-outline.button-checked .ion-plus:before {
+.button.button-positive.button-outline.activated .ion-plus:before,
+.button.button-positive.button-outline.checked .ion-plus:before {
     content: "\f122";
 }
 

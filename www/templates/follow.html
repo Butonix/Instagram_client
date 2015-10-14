@@ -15,7 +15,7 @@
                 <a ng-if="user.userid === currentUser.userid" ng-href="#/app/account"><img ng-src="{{follow.avatar}}"></a>
 
                 <h2>{{follow.username}}</h2>
-                <a ng-if="user.userid !== currentUser.userid" ng-class="{
+                <a ng-if="follow.userid !== currentUser.userid" ng-class="{
                     'button button-outline button-positive': !follow.tickFollow,
                     'button button-outline button-positive checked': follow.tickFollow}" ng-click="toggleFollow(follow)">
                     <i class="ion-plus"></i><i class="ion-person"></i>

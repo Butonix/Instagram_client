@@ -15,6 +15,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     AuthService.checkAuth().then(function (res) {
         AuthService.user = res.user;
         $scope.currentUser = AuthService.user;
+
         $state.go('app.home', {}, {reload: true});
     }, function (err) {
         $state.go('login', {}, {reload: true});
@@ -128,6 +129,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     $scope.message = "";
 
     $scope.search = function() {
+        $scope.message = "";
         var key = $scope.searchText.trim();
 
         if (key === "") {
@@ -136,9 +138,9 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         }
 
         UserService.searchUser(key).then(function (res) {
+
             if (res.status === 205) {
                 $scope.message = res.message;
-                console.log(res.status);
                 return false;
             } 
 
@@ -150,9 +152,8 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
                     for (var a = 0; a < $scope.currentUser.followings.length; a++) {
                         (function(b) {
-
                             if ($scope.currentUser.followings[b] === $scope.results[j].userid) {
-                                $scope.follows[j].tickFollow = true;                                
+                                $scope.results[j].tickFollow = true;                                
                             }
                         }(a));             
                     }
@@ -314,12 +315,22 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     }
 })
 
-.controller('UsersCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService) {
+.controller('UsersCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService, AuthService) {
     $scope.comment = {text: ""};
 
     $scope.account = function() {
         UserService.loadUser($stateParams.userid).then(function (res) {
             $scope.user = res;
+            $scope.user.tickFollow = false;
+
+                for (var a = 0; a < $scope.currentUser.followings.length; a++) {
+                    (function(b) {
+
+                        if ($scope.currentUser.followings[b] === $scope.user.userid) {
+                            $scope.user.tickFollow = true;                                
+                        }
+                    }(a));             
+                }
         }, function (err) {
             var alertPopup = $ionicPopup.alert({
                 title: 'Can not load user!',
@@ -385,6 +396,10 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         PostService.toggleLike(getPost);
     }
 
+    $scope.toggleFollow = function(getUser) {
+        UserService.toggleFollow(getUser);
+    } 
+
     $scope.refresh = function() {
         $scope.account();
         $scope.getPost();
@@ -403,7 +418,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     }
 })
 
-.controller('FollowCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService) {
+.controller('FollowCtrl', function($scope, $state, $stateParams, $ionicPopup, PostService, UserService, AuthService) {
     $scope.user = {};
 
     $scope.loadFollowers = function() {
@@ -450,8 +465,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                     }
                 }(i));                
             }
-
-            console.log($scope.follows);
 
         }, function (err) {
             var alertPopup = $ionicPopup.alert({

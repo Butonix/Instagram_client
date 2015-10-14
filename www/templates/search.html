@@ -12,13 +12,15 @@
 
         <div class="list card" ng-if="results.length > 0" ng-repeat="user in results">
             <div class="item item-avatar">
+            
                 <a ng-if="user.userid !== currentUser.userid" ng-href="#/app/search-user/{{user.userid}}"><img ng-src="{{user.avatar}}"></a>
                 <a ng-if="user.userid === currentUser.userid" ng-href="#/app/account"><img ng-src="{{user.avatar}}"></a>
 
                 <h2>{{user.username}}</h2>
+
                 <a ng-if="user.userid !== currentUser.userid" ng-class="{
                     'button button-outline button-positive': !user.tickFollow,
-                    'button button-outline button-checked': user.tickFollow}" ng-click="toggleFollow(user)">
+                    'button button-outline button-positive checked': user.tickFollow}" ng-click="toggleFollow(user)">
                     <i class="ion-plus"></i><i class="ion-person"></i>
                 </a>
             </div>            
