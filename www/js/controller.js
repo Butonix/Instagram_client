@@ -129,7 +129,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     $scope.deletePost = function(getPost) {
         PostService.deletePost(getPost).then(function (res) {
             $state.go($state.current.name, {}, {reload: true});
-            AuthService.user.countPost--;
+            AuthService.user.countPosts--;
 
         }, function (err) {
             var alertPopup = $ionicPopup.alert({
@@ -192,7 +192,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
 })
 
-.controller('CameraCtrl', function($scope, $state, $ionicPlatform, $ionicPopup, $cordovaCamera, $cordovaImagePicker, PostService) {
+.controller('CameraCtrl', function($scope, $state, $ionicPlatform, $ionicPopup, $cordovaCamera, $cordovaImagePicker, PostService, AuthService, UserService) {
     $scope.image = "";
     $scope.data = {};
 
@@ -243,7 +243,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                     title: 'Image uploaded!',
                     template: 'Suceessfully!'
                 });
-                AuthService.user.countPost++;
+                AuthService.user.countPosts++;
                 $state.go('app.home', {}, {reload: true});
             }, function (err) {
                 $ionicPopup.alert({
@@ -368,7 +368,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     $scope.deletePost = function(getPost) {
         PostService.deletePost(getPost).then(function (res) {
             $state.go($state.current.name, {}, {reload: true});
-            AuthService.user.countPost--;
+            AuthService.user.countPosts--;
             
         }, function (err) {
             var alertPopup = $ionicPopup.alert({

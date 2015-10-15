@@ -43,7 +43,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
 
             $http.post(URL.base + URL.authenticate, data)
                 .success(function (res) {
-                    AuthService.user = res.user;
+                    this.user = res.user;
                     storeUserCredentials(res.token, res.user);
                     resolve(res);
                 })
