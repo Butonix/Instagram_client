@@ -25,7 +25,7 @@
 
             <div class="item tabs tabs-secondary tabs-icon-left">
                 <a class="tab-item"><i ng-class="{'icon ion-ios-heart-outline': !post.tickLike, 'icon ion-ios-heart': post.tickLike}" ng-click="toggleLike(post)"></i></a>
-                <a class="tab-item"><i class="icon ion-ios-chatbubble-outline"></i></a>
+                <a class="tab-item" ng-if="post.user.userid === currentUser.userid"><i class="icon ion-trash-b" ng-click="deletePost(post.id)"></i></a>
             </div>
 
             <div class="item item-body">

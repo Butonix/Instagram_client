@@ -1,6 +1,7 @@
 angular.module('instagram.constant', [])
 
 .constant('URL', {
+    // base: 'https://infinite-dusk-7723.herokuapp.com',
     base: 'http://localhost:3000',
 
     authenticate: '/api/user/auth',

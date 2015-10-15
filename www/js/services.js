@@ -232,7 +232,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
     };
 })
 
-.factory('PostService', function($q, $http, URL, AuthService) {
+.factory('PostService', function($q, $http, $cordovaFileTransfer, URL, AuthService) {
     var loadNewfeeds = function() {
         return $q(function (resolve, reject) {
 
@@ -279,7 +279,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
                 fileKey: 'image',
                 params: data,
                 headers: {
-                    "x-auth-token": $http.defaults.headers.common['x-auth-token']
+                    "x-access-token": $http.defaults.headers.common['x-access-token']
                 }
             };
 
@@ -294,6 +294,19 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
 
                 });
         });
+    }
+
+    var deletePost = function(getPost) {
+        return $q(function (resolve, reject) {
+
+            $http.delete(URL.base + URL.postRead + '/' + getPost)
+                .success(function (res) {
+                    resolve(res);
+                })
+                .error(function (err) {
+                    reject(err);
+                });
+        }); 
     }
 
     var like = function(getPost) {
@@ -343,6 +356,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
 
             $http.post(URL.base + URL.postComment + '/' + getPost.id, data)
                 .success(function (res) {
+                    console.log(res);
                     getPost.comments.push(res.comment);
                     resolve(res.comment);
                 })
@@ -357,6 +371,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         loadComments: loadComments,
         loadPosts: loadPosts,
         postPost: postPost,
+        deletePost: deletePost,
         like: like,
         unlike: unlike,
         toggleLike: toggleLike,

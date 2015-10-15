@@ -31,7 +31,7 @@
                 </div>
 
                 <a href="#/app/edit" ng-if="user.userid === currentUser.userid"><button class="button button-block button-stable">Edit your profile</button></a>
-                
+
                 <a ng-if="user.userid !== currentUser.userid" ng-class="{
                     'button button-outline button-positive': !user.tickFollow,
                     'button button-outline button-positive checked': user.tickFollow}" ng-click="toggleFollow(user)">
@@ -60,7 +60,7 @@
 
             <div class="item tabs tabs-secondary tabs-icon-left">
                 <a class="tab-item"><i ng-class="{'icon ion-ios-heart-outline': !post.tickLike, 'icon ion-ios-heart': post.tickLike}" ng-click="toggleLike(post)"></i></a>
-                <a class="tab-item"><i class="icon ion-ios-chatbubble-outline"></i></a>
+                <a class="tab-item" ng-if="user.userid === currentUser.userid"><i class="icon ion-trash-b" ng-click="deletePost(post.id)"></i></a>
             </div>
 
             <div class="item item-body">

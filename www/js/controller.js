@@ -55,6 +55,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 .controller('HomeCtrl', function($scope, $state, $ionicPopup, PostService, UserService, AuthService) {
     $scope.currentUser = AuthService.user;
     $scope.comment = {text: ""};
+    console.log($scope.currentUser);
 
     $scope.refresh = function() {
         PostService.newFeeds().then(function (res) {
@@ -104,12 +105,26 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     }
 
     $scope.postComment = function(getPost) {
+        if ($scope.comment.text.trim() === "") return false;
         PostService.postComment(getPost, $scope.comment.text);
         $scope.comment.text = null;
     }
 
     $scope.toggleLike = function(getPost) {
         PostService.toggleLike(getPost);
+    }
+
+    $scope.deletePost = function(getPost) {
+        PostService.deletePost(getPost).then(function (res) {
+            $state.go($state.current.name, {}, {reload: true});
+            AuthService.user.countPost--;
+
+        }, function (err) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Can not delete Post!',
+                template: err.message
+            });
+        });
     }
 
 })
@@ -210,8 +225,13 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.post = function() {
 
-        PostService.postPost($scope.img, $scope.data)
+        PostService.postPost($scope.image, $scope.data)
             .then(function (res) {
+                $ionicPopup.alert({
+                    title: 'Image uploaded!',
+                    template: 'Suceessfully!'
+                });
+                AuthService.user.countPost++;
                 $state.go('app.home', {}, {reload: true});
             }, function (err) {
                 $ionicPopup.alert({
@@ -248,8 +268,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         }
 
         UserService.editUser(editUser).then(function (res) {
-            $scope.user = res.user;
-            console.log(res.user);
+            AuthService.user = res.user;
             $scope.user.oldPassword = "";
             $scope.user.newPassword = "";
             $scope.user.repeatPassword = "";
@@ -258,6 +277,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
                 title: 'Edit Profile successfully!',
                 template: res.message
             });
+
         }, function (err) {
             $ionicPopup.alert({
                 title: 'Edit Profile failure!',
@@ -274,7 +294,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.account = function() {
         $scope.user = AuthService.user;
-            console.log($scope.user);
     }
 
     $scope.getPost = function() {
@@ -332,6 +351,19 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     $scope.toggleLike = function(getPost) {
         PostService.toggleLike(getPost);
+    }
+
+    $scope.deletePost = function(getPost) {
+        PostService.deletePost(getPost).then(function (res) {
+            $state.go($state.current.name, {}, {reload: true});
+            AuthService.user.countPost--;
+            
+        }, function (err) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Can not delete Post!',
+                template: err.message
+            });
+        });
     }
 
     $scope.logout = function() {

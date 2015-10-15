@@ -49,6 +49,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         .state('app.home', {
             url: '/home',
             cache: false,
+            reload: true,
             views: {
                 'app-home': {
                 templateUrl: 'templates/home.html',
@@ -193,6 +194,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         .state('app.account', {
             url: '/account',
             cache: false,
+            reload: true,
             views: {
                 'app-account': {
                 templateUrl: 'templates/account.html',
