@@ -16,12 +16,13 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
     var storeUserCredentials = function(getToken, getUser) {
         window.localStorage.setItem(LOCAL_TOKEN_KEY, getToken);
         window.localStorage.setItem(LOCAL_USER_KEY, getUser.username);
-        useCredentials(getToken);
+        useCredentials(getToken, getUser);
     }
 
     var useCredentials = function(getToken, getUser) {
         try {
             this.user = JSON.parse(getUser);
+            console.log(this.user);
         } catch(err) {
             this.user = null;
         }
@@ -42,6 +43,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
 
             $http.post(URL.base + URL.authenticate, data)
                 .success(function (res) {
+                    AuthService.user = res.user;
                     storeUserCredentials(res.token, res.user);
                     resolve(res);
                 })

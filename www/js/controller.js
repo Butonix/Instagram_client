@@ -64,6 +64,18 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
             for (var i = 0; i < $scope.posts.length; i++) {
                 (function(j) {
                     $scope.posts[j].tickLike = false;
+                    $scope.posts[j].user = {};
+
+                    UserService.loadUser($scope.posts[j].userid).then(function (res) {
+                        $scope.posts[j].user.userid = res.userid;
+                        $scope.posts[j].user.username = res.username;
+                        $scope.posts[j].user.avatar = res.avatar;
+                    }, function (err) {
+                        var alertPopup = $ionicPopup.alert({
+                            title: 'Can not load newfeeds!',
+                            template: err.message
+                        });
+                    });
 
                     for (var a = 0; a < $scope.posts[j].likes.length; a++) {
                         (function(b) {
@@ -387,6 +399,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     $scope.account = function() {
         UserService.loadUser($stateParams.userid).then(function (res) {
             $scope.user = res;
+            console.log($scope.user);
             $scope.user.tickFollow = false;
 
                 for (var a = 0; a < AuthService.user.followings.length; a++) {
