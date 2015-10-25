@@ -44,6 +44,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
             $http.post(URL.base + URL.authenticate, data)
                 .success(function (res) {
                     this.user = res.user;
+                    console.log(res.user);
                     storeUserCredentials(res.token, res.user);
                     resolve(res);
                 })
@@ -92,6 +93,7 @@ angular.module('instagram.services', ['ionic', 'instagram.constant'])
         logout: logout,
         register: register,
         checkAuth: checkAuth,
+        destroyUserCredentials: destroyUserCredentials,
         isAuthenticated: isAuthenticated,
         user: this.user
     };

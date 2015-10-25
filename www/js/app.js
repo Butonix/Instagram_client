@@ -44,6 +44,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             url: '/app',
             absract: true,
             templateUrl: 'templates/app.html',
+            controller: 'AppCtrl'
         })
 
         .state('app.home', {

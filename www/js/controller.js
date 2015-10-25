@@ -4,9 +4,12 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 
     AuthService.checkAuth().then(function (res) {
         AuthService.user = res.user;
+        console.log(res.user);
+        console.log(AuthService.user);
 
         $state.go('app.home', {}, {reload: true});
     }, function (err) {
+        AuthService.destroyUserCredentials();
         $state.go('login', {}, {reload: true});
     });
 
@@ -37,6 +40,8 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     $scope.login = function() {
         AuthService.login($scope.user).then(function (res) {
             AuthService.user = res.user;
+            console.log(res.user);
+            console.log(AuthService.user);
 
             $state.go('app.home', {}, {reload: true});
             var alertPopup = $ionicPopup.alert({
@@ -55,7 +60,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
 .controller('HomeCtrl', function($scope, $state, $ionicPopup, PostService, UserService, AuthService) {
     $scope.currentUser = AuthService.user;
     $scope.comment = {text: ""};
-    console.log($scope.currentUser);
 
     $scope.refresh = function() {
         PostService.newFeeds().then(function (res) {
@@ -270,6 +274,7 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
         if ($scope.user.newPassword !== "") {
             if ($scope.user.newPassword === $scope.user.repeatPassword) {
                 editUser.newPassword = $scope.user.newPassword;
+                editUser.oldPassword = $scope.user.oldPassword;
             } else {
                 $ionicPopup.alert({
                     title: 'Change password failure!',
@@ -399,7 +404,6 @@ angular.module('instagram.controller', ['instagram.services', 'angularMoment'])
     $scope.account = function() {
         UserService.loadUser($stateParams.userid).then(function (res) {
             $scope.user = res;
-            console.log($scope.user);
             $scope.user.tickFollow = false;
 
                 for (var a = 0; a < AuthService.user.followings.length; a++) {
